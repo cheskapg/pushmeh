@@ -1,5 +1,5 @@
 # Use the official Node.js image as a base image
-FROM node:mcr.microsoft.com/windows/servercore
+FROM mcr.microsoft.com/windows/servercore
 
 # Set the working directory inside the container
 WORKDIR /app
