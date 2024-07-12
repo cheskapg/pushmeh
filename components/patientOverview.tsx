@@ -331,7 +331,7 @@ export default function PatientOverviewComponent({
 
         <h1>Patient Overview</h1>
         <div
-          className={`absolute left-[2%] -mt-1 rounded-[5px] bg-[#007C85] px-3 py-2 !text-[15px] text-white transition-all duration-100 ${isOpenHovered ? "scale-100" : "scale-0"}`}
+          className={`absolute !font-semibold left-[2%] rounded-[5px] bg-[#007C85] px-3 py-1 !text-[15px] text-white transition-all duration-100 ${isOpenHovered ? "scale-100" : "scale-0"}`}
         >
           <h1>OPEN</h1>
         </div>
