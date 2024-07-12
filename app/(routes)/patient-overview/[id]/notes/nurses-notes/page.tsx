@@ -16,7 +16,8 @@ import View from "@/components/shared/buttons/view";
 import { useParams, useRouter } from "next/navigation";
 import Pagination from "@/components/shared/pagination";
 import ResuableTooltip from "@/components/reusable/tooltip";
-
+import { formatCreatedTime, formatTableTime } from "@/lib/utils"; // Adjust the path as needed
+import { formatTableDate } from "@/lib/utils"; // Adjust the path as needed
 const Notes = () => {
   const router = useRouter();
   if (typeof window === "undefined") {
@@ -218,24 +219,24 @@ const Notes = () => {
               </span>
             </div>
             <div>
-              <p className="h-[22px] w-[1157px] text-[14px] font-normal text-[#64748B]">
+              <p className="my-1 h-[22px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalNotes} Notes
               </p>
             </div>
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
-              <p className="text-[18px]">Add</p>
+              <Image src="/imgs/add.svg" alt="" width={18} height={18} />
+              <p className="">Add</p>
             </button>
             <button className="btn-pdfs gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
-                width={22}
-                height={22}
+                width={18}
+                height={18}
               />
-              <p className="text-[18px]">Generate PDF</p>
+              <p className="">Generate PDF</p>
             </button>
           </div>
         </div>
@@ -247,7 +248,7 @@ const Notes = () => {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[573px] bg-[calc(100%-20px)] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] border-[1px] border-[#E7EAEE] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -259,9 +260,9 @@ const Notes = () => {
                 <Image
                   src="/svgs/search.svg"
                   alt="Search"
-                  width={20}
-                  height={20}
-                  className="pointer-events-none absolute left-8 top-9"
+                  width="20"
+                  height="20"
+                  className="pointer-events-none absolute left-8 top-8"
                 />
               </div>
             </form>
@@ -304,7 +305,7 @@ const Notes = () => {
         <div>
           <table className="text-left rtl:text-right">
             <thead>
-              <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
+              <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
                 <td className="px-6 py-3">NOTES UID</td>
                 <td className="px-6 py-3">DATE</td>
                 <td className="px-6 py-3">TIME</td>
@@ -314,7 +315,7 @@ const Notes = () => {
                 <td className="w-[14px]"></td>
               </tr>
             </thead>
-            <tbody className="h-[220px] overflow-y-scroll">
+            <tbody className="h-[254px]">
               {patientNotes.length === 0 && (
                 <h1 className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
                   <p className="text-center text-[15px] font-normal text-gray-700">
@@ -325,23 +326,17 @@ const Notes = () => {
               {patientNotes.map((note, index) => (
                 <tr
                   key={index}
-                  className="group border-b odd:bg-white even:bg-gray-50 hover:bg-[#f4f4f4]"
+                  className="group border-b text-[15px] hover:bg-[#f4f4f4]"
                 >
                   <td className="px-6 py-3">
                     <ResuableTooltip text={note.notes_uuid} />
                   </td>
                   <td className="px-6 py-3">
-                    {new Date(note.notes_createdAt).toLocaleDateString()}
+                    {formatTableDate(note.notes_createdAt)}{" "}
                   </td>
-                  <td className="max-w-[552px] px-6 py-3">
-                    {new Date(
-                      new Date(note.notes_createdAt).getTime() -
-                        new Date().getTimezoneOffset() * 60000,
-                    ).toLocaleTimeString(navigator.language, {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    })}
+                  <td className="px-6 py-3">
+                    {formatCreatedTime(note.notes_createdAt)}
+                    {/* time not formattd left as is for now  and check with local time of machine */}
                   </td>
                   <td className="px-6 py-3">
                     <ResuableTooltip text={note.notes_subject} />

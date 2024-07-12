@@ -235,15 +235,15 @@ const Prorenata = () => {
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
+              <Image src="/imgs/add.svg" alt="" width={18} height={18} />
               <p className="">Add</p>
             </button>
             <button className="btn-pdfs gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
-                width={22}
-                height={22}
+                width={18}
+                height={18}
               />
               <p className="">Generate PDF</p>
             </button>
@@ -313,7 +313,7 @@ const Prorenata = () => {
           <div>
             <table className="text-left rtl:text-right">
               <thead>
-                <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
+                <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
                   <td className="px-6 py-3">Medication UID</td>
                   <td className="px-6 py-3">Date</td>
                   <td className="px-6 py-3">Time</td>

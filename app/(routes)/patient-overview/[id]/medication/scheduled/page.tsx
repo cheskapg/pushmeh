@@ -314,7 +314,7 @@ const Scheduled = () => {
           <div>
             <table className="text-left rtl:text-right">
               <thead>
-                <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
+                <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
                   <td className="px-6 py-3">Medication UID</td>
                   <td className="px-6 py-3">Date</td>
                   <td className="px-6 py-3">Time</td>
@@ -352,7 +352,7 @@ const Scheduled = () => {
                             schedMed.medicationlogs_medicationLogsDate,
                           )}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-3">
                           {formatTableTime(
                             schedMed.medicationlogs_medicationLogsTime,
                           )}
