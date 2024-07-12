@@ -320,9 +320,10 @@ export default function PatientOverviewComponent({
           onMouseLeave={onOpenHoverLeave}
           onClick={toggleSidebar}
         >
+          
           <Image
-            className="ml-1"
-            src="/icons/sidebar-open.svg"
+            className=""
+            src={`${isOpenHovered ? "/icons/sidebar-hover.svg" : "/icons/sidebar-open.svg"}`}  
             alt="sidebar-open"
             width={20}
             height={20}
@@ -331,7 +332,7 @@ export default function PatientOverviewComponent({
 
         <h1>Patient Overview</h1>
         <div
-          className={`absolute !font-semibold left-[2%] rounded-[5px] bg-[#007C85] px-3 py-1 !text-[15px] text-white transition-all duration-100 ${isOpenHovered ? "scale-100" : "scale-0"}`}
+          className={`absolute !font-semibold left-[1.5%] rounded-[5px] bg-[#007C85] px-3 py-1 !text-[15px] text-white transition-all duration-100 ${isOpenHovered ? "scale-100" : "scale-0"}`}
         >
           <h1>OPEN</h1>
         </div>
