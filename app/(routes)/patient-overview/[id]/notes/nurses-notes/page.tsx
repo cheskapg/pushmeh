@@ -219,8 +219,8 @@ const Notes = () => {
               </span>
             </div>
             <div>
-              <p className="my-1 h-[22px] text-[15px] font-normal text-[#64748B]">
-                Total of {totalNotes} Notes
+            <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
+            Total of {totalNotes} Notes
               </p>
             </div>
           </div>

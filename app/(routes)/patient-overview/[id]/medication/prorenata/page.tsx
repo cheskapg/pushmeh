@@ -228,7 +228,7 @@ const Prorenata = () => {
               <span className="active">PRN</span>
             </div>
             <div>
-              <p className="h-[22px]v my-1 w-[1157px] text-[15px] font-normal text-[#64748B]">
+              <p className="h-[23px] my-1 text-[15px] font-normal text-[#64748B]">
                 Total of {totalPRNMeds} PRN Medication Logs
               </p>
             </div>
@@ -257,7 +257,7 @@ const Prorenata = () => {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]  placeholder:text-[#64748B]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none border-[1px] border-[#E7EAEE]  placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -328,7 +328,7 @@ const Prorenata = () => {
               <tbody className="h-[254px] ">
                 {patientPRNMed.length === 0 && (
                   <tr>
-                    <td className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+                    <td className="border-1 absolute flex items-center justify-center py-5">
                       <p className="text-center text-[15px] font-normal text-gray-700">
                         No PRN Medication Log/s <br />
                       </p>
@@ -347,7 +347,7 @@ const Prorenata = () => {
                       <td className="px-6 py-3">
                         {formatTableDate(
                           prnMed.medicationlogs_medicationLogsDate,
-                        )}{" "}
+                        )}
                       </td>
                       <td className="px-6 py-3">
                         {formatTableTime(
@@ -362,7 +362,7 @@ const Prorenata = () => {
                       </td>
                       <td className="px-6 py-3">
                         500mg
-                        {/* static value for dosage temporary*/}
+                        {/* static value for dosage temporary */}
                       </td>
 
                       <td className="px-6 py-3">

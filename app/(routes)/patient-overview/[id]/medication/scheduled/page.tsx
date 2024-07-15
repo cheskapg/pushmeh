@@ -229,7 +229,7 @@ const Scheduled = () => {
               </span>
             </div>
             <div>
-              <p className="my-1 h-[22px] text-[15px] font-normal text-[#64748B]">
+              <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalScheduledMeds} Scheduled Medication Logs
               </p>
             </div>
@@ -329,7 +329,7 @@ const Scheduled = () => {
                 {patientScheduledMed.length === 0 && (
                   <tr>
                     <td className="border-1 absolute flex items-center justify-center py-5">
-                      <p className="flex text-center text-[15px] font-normal text-gray-700">
+                      <p className="text-center text-[15px] font-normal text-gray-700">
                         No Scheduled Medication Log/s <br />
                       </p>
                     </td>
