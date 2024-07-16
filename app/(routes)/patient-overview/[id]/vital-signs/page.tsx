@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
-
+import { formatTableTime } from "@/lib/utils";
+import { formatTableDate } from "@/lib/utils";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
@@ -36,6 +37,7 @@ export default function vitalsigns() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+  
   interface Modalprops {
     label: string;
     isOpen: boolean;
@@ -49,19 +51,6 @@ export default function vitalsigns() {
       document.body.style.overflow = "visible";
       setIsEdit(false);
       setVitalSignData([]);
-    }
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Function to handle going to next page
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
     }
   };
 
@@ -103,59 +92,6 @@ export default function vitalsigns() {
     { label: "Heart Rate", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
 
-  const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const pageNumberInt = parseInt(pageNumber, 10);
-
-    // Check if pageNumber is a valid number and greater than 0
-    if (
-      !isNaN(pageNumberInt) &&
-      pageNumberInt <= totalPages &&
-      pageNumberInt > 0
-    ) {
-      setCurrentPage(pageNumberInt);
-
-      console.log("Navigate to page:", pageNumberInt);
-    } else {
-      setGotoError(true);
-      setTimeout(() => {
-        setGotoError(false);
-      }, 3000);
-      console.error("Invalid page number:", pageNumber);
-    }
-  };
-  const formatTime = (timeString: string) => {
-    // Split the time string into hours and minutes
-    const [hours, minutes] = timeString.split(":").map(Number);
-
-    // Format the hours part into 12-hour format
-    let formattedHours = hours % 12 || 12; // Convert 0 to 12
-    const ampm = hours < 12 ? "am" : "pm"; // Determine if it's AM or PM
-
-    // If minutes is undefined or null, set it to 0
-    const formattedMinutes =
-      minutes !== undefined ? minutes.toString().padStart(2, "0") : "00";
-
-    // Return the formatted time string
-    return `${formattedHours}:${formattedMinutes}${ampm}`;
-  };
-  const formatDate = (dateOfSurgery: string | number | Date) => {
-    // Create a new Date object from the provided createdAt date string
-    const date = new Date(dateOfSurgery);
-
-    // Get the month, day, and year
-    const month = date.toLocaleString("default", { month: "short" });
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    const formattedDate = `${month} ${day}, ${year}`;
-
-    return formattedDate;
-  };
-  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(e.target.value);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -239,7 +175,7 @@ export default function vitalsigns() {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[573px] bg-[calc(100%-20px)] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
+                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -325,10 +261,10 @@ export default function vitalsigns() {
                     <ResuableTooltip text={vitalSign.vitalsign_uuid} />
                   </td>
                   <td className="px-6 py-3">
-                    {formatDate(vitalSign.vitalsign_date)}
+                    {formatTableDate(vitalSign.vitalsign_date)}
                   </td>
                   <td className="px-6 py-3">
-                    {formatTime(vitalSign.vitalsign_time)}
+                    {formatTableTime(vitalSign.vitalsign_time)}
                   </td>
                   <td className="px-6 py-3">
                     <ResuableTooltip

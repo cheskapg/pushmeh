@@ -2,11 +2,8 @@
 
 import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
-import Add from "@/components/shared/buttons/add";
-import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/edit";
 import { useState } from "react";
-import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchScheduledMedByPatient } from "@/app/api/medication-logs-api/scheduled-med-api";
 import { ErrorModal } from "@/components/shared/error";
@@ -43,12 +40,6 @@ const Scheduled = () => {
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
 
-  interface Modalprops {
-    label: string;
-    isOpen: boolean;
-    isModalOpen: (isOpen: boolean) => void;
-  }
-
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
     if (isOpen) {
@@ -57,19 +48,6 @@ const Scheduled = () => {
       document.body.style.overflow = "visible";
       setIsEdit(false);
       setScheduledMedData([]);
-    }
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Function to handle going to next page
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
     }
   };
 
