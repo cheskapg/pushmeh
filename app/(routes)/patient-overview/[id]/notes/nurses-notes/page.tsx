@@ -16,8 +16,7 @@ import View from "@/components/shared/buttons/view";
 import { useParams, useRouter } from "next/navigation";
 import Pagination from "@/components/shared/pagination";
 import ResuableTooltip from "@/components/reusable/tooltip";
-import { formatCreatedTime, formatTableTime } from "@/lib/utils"; // Adjust the path as needed
-import { formatTableDate } from "@/lib/utils"; // Adjust the path as needed
+import { formatCreatedTime, formatTableDate } from "@/lib/utils"; // Adjust the path as needed
 const Notes = () => {
   const router = useRouter();
   if (typeof window === "undefined") {
@@ -91,6 +90,7 @@ const Notes = () => {
       document.body.style.overflow = "visible";
       setNotesToEdit([]);
       setIsEdit(false);
+      setPatientNotesData([]);  
     }
   };
   const goToPreviousPage = () => {
@@ -219,13 +219,19 @@ const Notes = () => {
               </span>
             </div>
             <div>
-            <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
-            Total of {totalNotes} Notes
+              <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
+                Total of {totalNotes} Notes
               </p>
             </div>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
+            <button
+              onClick={() => {
+                isModalOpen(true);
+                setIsView(false);
+              }}
+              className="btn-add gap-2"
+            >
               <Image src="/imgs/add.svg" alt="" width={18} height={18} />
               <p className="">Add</p>
             </button>
@@ -311,13 +317,14 @@ const Notes = () => {
                 <td className="px-6 py-3">TIME</td>
                 <td className="px-6 py-3">SUBJECT</td>
                 <td className="px-6 py-3">NOTES</td>
-                <td className="px-6 py-3 text-center">ACTION</td>
-                <td className="w-[14px]"></td>
+                <td className="relative px-6 py-3">
+                  <p className="absolute right-[80px] top-[23px]">Action</p>
+                </td>
               </tr>
             </thead>
             <tbody className="h-[254px]">
               {patientNotes.length === 0 && (
-                <h1 className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+                <h1 className="border-1 absolute flex  items-center justify-center py-5">
                   <p className="text-center text-[15px] font-normal text-gray-700">
                     No Note/s <br />
                   </p>
@@ -326,13 +333,13 @@ const Notes = () => {
               {patientNotes.map((note, index) => (
                 <tr
                   key={index}
-                  className="group border-b text-[15px] hover:bg-[#f4f4f4]"
+                  className="group border-b text-[15px] h-[63px] hover:bg-[#f4f4f4]"
                 >
                   <td className="px-6 py-3">
                     <ResuableTooltip text={note.notes_uuid} />
                   </td>
                   <td className="px-6 py-3">
-                    {formatTableDate(note.notes_createdAt)}{" "}
+                    {formatTableDate(note.notes_createdAt)}
                   </td>
                   <td className="px-6 py-3">
                     {formatCreatedTime(note.notes_createdAt)}
@@ -344,15 +351,16 @@ const Notes = () => {
                   <td className="px-6 py-3">
                     <ResuableTooltip text={note.notes_notes} />
                   </td>
-                  <td className="flex justify-center px-6 py-3">
+                  <td className="relative py-3 pl-6">
+                    {" "}
                     <p
                       onClick={() => {
                         isModalOpen(true);
                         setIsView(true);
-
                         setPatientNotesData(note);
                       }}
-                    >
+                      className="absolute top-[11px] right-[40px]"
+                      >
                       <View></View>
                     </p>
                   </td>
@@ -378,7 +386,8 @@ const Notes = () => {
             <NursenotesModalContent
               isModalOpen={isModalOpen}
               isOpen={isOpen}
-              label="sample label"
+              isView={isView}
+              label={isView ? "View" : "Add"}
               PatientNotesData={PatientNotesData}
               onSuccess={onSuccess}
             />
@@ -400,7 +409,7 @@ const Notes = () => {
 
       {isSuccessOpen && (
         <SuccessModal
-          label={isEdit ? "Edit Note" : "Add Note"}
+          label={isView ? "View" : "Add"}
           isAlertOpen={isSuccessOpen}
           toggleModal={setIsSuccessOpen}
           isUpdated={isUpdated}

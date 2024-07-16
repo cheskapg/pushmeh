@@ -321,8 +321,8 @@ const Prorenata = () => {
                   <td className="px-6 py-3">Dosage</td>
                   <td className="px-6 py-3">Notes</td>
                   <td className="px-6 py-3">Status</td>
-                  <td className="px-9 py-3">Action</td>
-                  <td className="w-[14px]"></td>
+                  {/* <td className="px-6 py-3 "><p className="ml-[38px] w-[109px]">Action</p></td>    */}
+                  <td className="px-6 py-3 relative"><p className="absolute top-[23px] right-[80px]">Action</p></td>  
                 </tr>
               </thead>
               <tbody className="h-[254px] ">
@@ -339,7 +339,7 @@ const Prorenata = () => {
                   <>
                     <tr
                       key={index}
-                      className="group  border-b text-[15px] hover:bg-[#f4f4f4]"
+                      className="group  h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                     >
                       <td className="px-6 py-3">
                         <ResuableTooltip text={prnMed.medicationlogs_uuid} />
@@ -368,7 +368,7 @@ const Prorenata = () => {
                       <td className="px-6 py-3">
                         <ResuableTooltip text={prnMed.medicationlogs_notes} />
                       </td>
-                      <td className="text-15px me-1 flex items-center rounded-full px-3 py-5">
+                      <td className="text-15px flex items-center rounded-full px-6 py-5">
                         <div
                           className={`relative flex h-[25px] w-[85px] items-center justify-center rounded-[30px] font-semibold ${
                             prnMed.medicationlogs_medicationLogStatus ===
@@ -387,13 +387,14 @@ const Prorenata = () => {
                         </div>
                       </td>
 
-                      <td className="px-6 py-3">
+                      <td className="pl-6 py-3 relative ">
                         <p
                           onClick={() => {
                             isModalOpen(true);
                             setIsEdit(true);
                             setPRNData(prnMed);
                           }}
+                          className="absolute top-[11px] right-[40px]"
                         >
                           <Edit></Edit>
                         </p>

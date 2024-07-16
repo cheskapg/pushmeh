@@ -321,10 +321,10 @@ const Scheduled = () => {
                   <td className="px-6 py-3">Medication</td>
                   <td className="px-6 py-3">Notes</td>
                   <td className="px-6 py-3">Status</td>
-                  <td className="px-9 py-3">Action</td>
-                  <td className="w-[14px]"></td>
+                  {/* <td className="px-6 py-3 "><p className="ml-[66px] w-[109px]">Action</p></td>    */}
+                  <td className="px-6 py-3 relative"><p className="absolute top-[23px] right-[80px]">Action</p></td>   
                 </tr>
-              </thead>
+              </thead>                                                                                                                                
               <tbody className="h-[254px]">
                 {patientScheduledMed.length === 0 && (
                   <tr>
@@ -340,7 +340,7 @@ const Scheduled = () => {
                     {patientScheduledMed.map((schedMed, index) => (
                       <tr
                         key={index}
-                        className="group border-b text-[15px] hover:bg-[#f4f4f4]"
+                        className="group border-b text-[15px]  h-[63px] hover:bg-[#f4f4f4]"
                       >
                         <td className="px-6 py-3">
                           <ResuableTooltip
@@ -368,8 +368,8 @@ const Scheduled = () => {
                             text={schedMed.medicationlogs_notes}
                           />
                         </td>
-                        <td className="text-15px me-1 flex items-center rounded-full px-3 py-5">
-                          <div
+                        <td className="text-15px flex items-center rounded-full px-6 py-5">
+                        <div
                             className={`relative flex h-[25px] w-[85px] items-center justify-center rounded-[30px] font-semibold ${
                               schedMed.medicationlogs_medicationLogStatus ===
                               "Given"
@@ -387,14 +387,15 @@ const Scheduled = () => {
                           </div>
                         </td>
 
-                        <td className="px-6 py-3">
-                          <p
+                        <td className="pl-6 py-3 relative ">
+                        <p
                             onClick={() => {
                               isModalOpen(true);
                               setIsEdit(true);
                               setScheduledMedData(schedMed);
                             }}
-                          >
+                            className="absolute top-[11px] right-[40px]"
+                            >
                             <Edit></Edit>
                           </p>
                         </td>
