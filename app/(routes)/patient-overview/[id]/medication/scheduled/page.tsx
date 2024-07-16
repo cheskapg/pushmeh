@@ -217,7 +217,7 @@ const Scheduled = () => {
               <Image src="/imgs/add.svg" alt="" width={18} height={18} />
               <p className="">Add</p>
             </button>
-            <button className="btn-pdfs gap-2">
+            <button className="btn-pdf gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
@@ -300,9 +300,11 @@ const Scheduled = () => {
                   <td className="px-6 py-3">Notes</td>
                   <td className="px-6 py-3">Status</td>
                   {/* <td className="px-6 py-3 "><p className="ml-[66px] w-[109px]">Action</p></td>    */}
-                  <td className="px-6 py-3 relative"><p className="absolute top-[23px] right-[80px]">Action</p></td>   
+                  <td className="relative px-6 py-3">
+                    <p className="absolute right-[80px] top-[23px]">Action</p>
+                  </td>
                 </tr>
-              </thead>                                                                                                                                
+              </thead>
               <tbody className="h-[254px]">
                 {patientScheduledMed.length === 0 && (
                   <tr>
@@ -318,7 +320,7 @@ const Scheduled = () => {
                     {patientScheduledMed.map((schedMed, index) => (
                       <tr
                         key={index}
-                        className="group border-b text-[15px]  h-[63px] hover:bg-[#f4f4f4]"
+                        className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                       >
                         <td className="px-6 py-3">
                           <ResuableTooltip
@@ -346,7 +348,7 @@ const Scheduled = () => {
                             text={schedMed.medicationlogs_notes}
                           />
                         </td>
-                        <td className="text-15px flex items-center rounded-full px-6 py-5">
+                        <td className="text-15px rounded-full px-6 ">
                         <div
                             className={`relative flex h-[25px] w-[85px] items-center justify-center rounded-[30px] font-semibold ${
                               schedMed.medicationlogs_medicationLogStatus ===
@@ -365,15 +367,15 @@ const Scheduled = () => {
                           </div>
                         </td>
 
-                        <td className="pl-6 py-3 relative ">
-                        <p
+                        <td className="relative py-3 pl-6">
+                          <p
                             onClick={() => {
                               isModalOpen(true);
                               setIsEdit(true);
                               setScheduledMedData(schedMed);
                             }}
-                            className="absolute top-[11px] right-[40px]"
-                            >
+                            className="absolute right-[40px] top-[11px]"
+                          >
                             <Edit></Edit>
                           </p>
                         </td>

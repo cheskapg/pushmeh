@@ -84,7 +84,7 @@ const Notes = () => {
       document.body.style.overflow = "visible";
       setNotesToEdit([]);
       setIsEdit(false);
-      setPatientNotesData([]);  
+      setPatientNotesData([]);
     }
   };
 
@@ -172,7 +172,7 @@ const Notes = () => {
               <Image src="/imgs/add.svg" alt="" width={18} height={18} />
               <p className="">Add</p>
             </button>
-            <button className="btn-pdfs gap-2">
+            <button className="btn-pdf gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
@@ -261,7 +261,7 @@ const Notes = () => {
             </thead>
             <tbody className="h-[254px]">
               {patientNotes.length === 0 && (
-                <h1 className="border-1 absolute flex  items-center justify-center py-5">
+                <h1 className="border-1 absolute flex items-center justify-center py-5">
                   <p className="text-center text-[15px] font-normal text-gray-700">
                     No Note/s <br />
                   </p>
@@ -270,7 +270,7 @@ const Notes = () => {
               {patientNotes.map((note, index) => (
                 <tr
                   key={index}
-                  className="group border-b text-[15px] h-[63px] hover:bg-[#f4f4f4]"
+                  className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                 >
                   <td className="px-6 py-3">
                     <ResuableTooltip text={note.notes_uuid} />
@@ -296,8 +296,8 @@ const Notes = () => {
                         setIsView(true);
                         setPatientNotesData(note);
                       }}
-                      className="absolute top-[11px] right-[40px]"
-                      >
+                      className="absolute right-[40px] top-[11px]"
+                    >
                       <View></View>
                     </p>
                   </td>

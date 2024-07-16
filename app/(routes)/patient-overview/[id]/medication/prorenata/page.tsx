@@ -42,7 +42,6 @@ const Prorenata = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
 
-
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
     if (isOpen) {
@@ -91,7 +90,6 @@ const Prorenata = () => {
     { label: "Time", onClick: handleSortOptionClick },
     { label: "Medication", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -166,7 +164,7 @@ const Prorenata = () => {
               <span className="active">PRN</span>
             </div>
             <div>
-              <p className="h-[23px] my-1 text-[15px] font-normal text-[#64748B]">
+              <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalPRNMeds} PRN Medication Logs
               </p>
             </div>
@@ -176,7 +174,7 @@ const Prorenata = () => {
               <Image src="/imgs/add.svg" alt="" width={18} height={18} />
               <p className="">Add</p>
             </button>
-            <button className="btn-pdfs gap-2">
+            <button className="btn-pdf gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
@@ -195,7 +193,7 @@ const Prorenata = () => {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none border-[1px] border-[#E7EAEE]  placeholder:text-[#64748B]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] border-[1px] border-[#E7EAEE] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -260,10 +258,12 @@ const Prorenata = () => {
                   <td className="px-6 py-3">Notes</td>
                   <td className="px-6 py-3">Status</td>
                   {/* <td className="px-6 py-3 "><p className="ml-[38px] w-[109px]">Action</p></td>    */}
-                  <td className="px-6 py-3 relative"><p className="absolute top-[23px] right-[80px]">Action</p></td>  
+                  <td className="relative px-6 py-3">
+                    <p className="absolute right-[80px] top-[23px]">Action</p>
+                  </td>
                 </tr>
               </thead>
-              <tbody className="h-[254px] ">
+              <tbody className="h-[254px]">
                 {patientPRNMed.length === 0 && (
                   <tr>
                     <td className="border-1 absolute flex items-center justify-center py-5">
@@ -277,7 +277,7 @@ const Prorenata = () => {
                   <>
                     <tr
                       key={index}
-                      className="group  h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
+                      className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                     >
                       <td className="px-6 py-3">
                         <ResuableTooltip text={prnMed.medicationlogs_uuid} />
@@ -306,18 +306,18 @@ const Prorenata = () => {
                       <td className="px-6 py-3">
                         <ResuableTooltip text={prnMed.medicationlogs_notes} />
                       </td>
-                      <td className="text-15px flex items-center rounded-full px-6 py-5">
+                      <td className="text-15px rounded-full px-6 ">
                         <div
-                          className={`relative flex h-[25px] w-[85px] items-center justify-center rounded-[30px] font-semibold ${
+                          className={` relative flex w-[85px] items-center justify-center rounded-[30px] font-semibold ${
                             prnMed.medicationlogs_medicationLogStatus ===
                             "Given"
-                              ? "bg-[#CCFFDD] text-[15px] text-[#17C653]" // Green color for Given
+                              ? "bg-[#CCFFDD]  text-[#17C653]" // Green color for Given
                               : prnMed.medicationlogs_medicationLogStatus ===
                                   "Held"
-                                ? "h-[25px] bg-[#FFF8DD] px-7 text-center text-[15px] text-[#F6C000]" // Dark color for Held
+                                ? "h-[25px] bg-[#FFF8DD] px-7 text-center  text-[#F6C000]" // Dark color for Held
                                 : prnMed.medicationlogs_medicationLogStatus ===
                                     "Refused"
-                                  ? "h-[25px] w-[85px] bg-[#FFE8EC] text-[15px] text-[#DB3956]" // Red color for Refused
+                                  ? "h-[25px] w-[85px] bg-[#FFE8EC]  text-[#DB3956]" // Red color for Refused
                                   : prnMed.medicationlogs_medicationLogStatus
                           }`}
                         >
@@ -325,14 +325,14 @@ const Prorenata = () => {
                         </div>
                       </td>
 
-                      <td className="pl-6 py-3 relative ">
+                      <td className="relative py-3 pl-6">
                         <p
                           onClick={() => {
                             isModalOpen(true);
                             setIsEdit(true);
                             setPRNData(prnMed);
                           }}
-                          className="absolute top-[11px] right-[40px]"
+                          className="absolute right-[40px] top-[11px]"
                         >
                           <Edit></Edit>
                         </p>

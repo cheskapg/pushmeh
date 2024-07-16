@@ -173,7 +173,7 @@ const Notes = () => {
               <Image src="/imgs/add.svg" alt="" width={18} height={18} />
               <p className="text-[15px]">Add</p>
             </button>
-            <button className="btn-pdfs gap-2">
+            <button className="btn-pdf gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
@@ -257,7 +257,8 @@ const Notes = () => {
                 <td className="px-6 py-3">DETAILS</td>
                 <td className="relative px-6 py-3">
                   <p className="absolute right-[80px] top-[23px]">Action</p>
-                </td>              </tr>
+                </td>{" "}
+              </tr>
             </thead>
             <tbody className="h-[254px]">
               {patientNotes.length === 0 && (
@@ -270,7 +271,7 @@ const Notes = () => {
               {patientNotes.map((note, index) => (
                 <tr
                   key={index}
-                  className="group border-b text-[15px] h-[63px] hover:bg-[#f4f4f4]"
+                  className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                 >
                   <td className="px-6 py-3">
                     <ResuableTooltip text={note.notes_uuid} />

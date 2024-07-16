@@ -137,7 +137,7 @@ body,
   background-color: #2267b9;
 }
 /* test */
-.btn-pdfs {
+.btn-pdf {
   display: flex;
   align-items: center;
   font-weight: bold;
@@ -152,13 +152,13 @@ body,
   height: 52px;
 }
 
-.btn-pdfs:hover {
+.btn-pdf:hover {
   background: #007c85;
   color: #ffffff;
   border-color: #007c85;
 }
 
-.btn-pdfs:hover > img {
+.btn-pdf:hover > img {
   filter: brightness(0) invert(1);
 }
 
@@ -261,7 +261,7 @@ body,
 .slash {
   font-weight: 500;
   font-size: 20px;
-  color: #64748B;
+  color: #64748b;
 }
 
 .active {
@@ -273,7 +273,7 @@ body,
 .bread {
   font-weight: 500;
   font-size: 20px;
-  color: #64748B;
+  color: #64748b;
   cursor: pointer;
 }
 
@@ -305,17 +305,16 @@ body,
 }
 
 ::-webkit-scrollbar-track {
-  background: #EAEAEA;
+  background: #eaeaea;
   opacity: 30;
   max-height: 400px;
-  
 }
 ::-webkit-scrollbar-thumb {
-  background: #CCCCCC;
+  background: #cccccc;
   opacity: 100;
   width: 10px; /* add a 2px transparent border */
-  border-top: 4px solid #EAEAEA; /* add a 4px solid border on the left side */
-  border-bottom: 4px solid #EAEAEA; /* add a 4px solid border on the right side */
+  border-top: 4px solid #eaeaea; /* add a 4px solid border on the left side */
+  border-bottom: 4px solid #eaeaea; /* add a 4px solid border on the right side */
   background-clip: padding-box;
 }
 
@@ -453,7 +452,7 @@ table {
 }
 
 .sidebar-divider {
-  background-color:#D0D5DD;
+  background-color: #d0d5dd;
   height: 0.5px;
   margin-top: 10px;
   margin-bottom: 10px;

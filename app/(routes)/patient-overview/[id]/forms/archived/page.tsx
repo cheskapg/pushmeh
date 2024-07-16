@@ -161,7 +161,7 @@ export default function ArchiveTab() {
             </div>
           </div>
           <div className="flex gap-2">
-            <button className="btn-pdfs gap-2">
+            <button className="btn-pdf gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""

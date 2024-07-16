@@ -253,7 +253,7 @@ const Appointment = () => {
             </button>
             <button
               onClick={() => isModalReminderOpen(true)}
-              className="btn-pdfs gap-2"
+              className="btn-pdf gap-2"
             >
               <ClipboardList width={22} height={22} />
               <p className="text-[18px]">Reminder</p>

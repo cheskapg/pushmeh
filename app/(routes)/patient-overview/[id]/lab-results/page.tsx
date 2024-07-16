@@ -218,7 +218,7 @@ export default function Laboratoryresults() {
               <Image src="/imgs/add.svg" alt="" width={22} height={22} />
               <p className="text-[18px]">Add</p>
             </button>
-            <button className="btn-pdfs gap-2">
+            <button className="btn-pdf gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
