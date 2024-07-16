@@ -15,8 +15,9 @@ import { IncidentreportModalContent } from "@/components/modal-content/incidentr
 import Modal from "@/components/reusable/modal";
 import Pagination from "@/components/shared/pagination";
 import { ImageMinus } from "lucide-react";
+import View from "@/components/shared/buttons/view";
 import ResuableTooltip from "@/components/reusable/tooltip";
-
+import { formatCreatedTime, formatTableDate } from "@/lib/utils";
 const Notes = () => {
   const router = useRouter();
   if (typeof window === "undefined") {
@@ -26,12 +27,14 @@ const Notes = () => {
   const [sortOrder, setSortOrder] = useState<string>("ASC");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [patientNotes, setPatientNotes] = useState<any[]>([]);
+  const [PatientNotesData, setPatientNotesData] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalNotes, setTotalNotes] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState("");
   const [gotoError, setGotoError] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState("");
+  const [isView, setIsView] = useState(false);
   const [term, setTerm] = useState<string>("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [isEdit, setIsEdit] = useState(false);
@@ -87,6 +90,7 @@ const Notes = () => {
       document.body.style.overflow = "visible";
       setNotesToEdit([]);
       setIsEdit(false);
+      setPatientNotesData([]);
     }
   };
   const goToPreviousPage = () => {
@@ -215,24 +219,30 @@ const Notes = () => {
               <p className="active">Incident Report</p>
             </div>
             <div>
-              <p className="h-[22px] w-[1157px] text-[15px] font-normal text-[#64748B]">
+              <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalNotes} Notes
               </p>
             </div>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
-              <p className="text-[18px]">Add</p>
+            <button
+              onClick={() => {
+                isModalOpen(true);
+                setIsView(false);
+              }}
+              className="btn-add gap-2"
+            >
+              <Image src="/imgs/add.svg" alt="" width={18} height={18} />
+              <p className="text-[15px]">Add</p>
             </button>
             <button className="btn-pdfs gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
-                width={22}
-                height={22}
+                width={18}
+                height={18}
               />
-              <p className="text-[18px]">Generate PDF</p>
+              <p className="text-[15px]">Generate PDF</p>
             </button>
           </div>
         </div>
@@ -244,7 +254,7 @@ const Notes = () => {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[573px] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] border-[1px] border-[#E7EAEE] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -258,7 +268,7 @@ const Notes = () => {
                   alt="Search"
                   width="20"
                   height="20"
-                  className="pointer-events-none absolute left-8 top-9"
+                  className="pointer-events-none absolute left-8 top-8"
                 />
               </div>
             </form>
@@ -301,17 +311,17 @@ const Notes = () => {
         <div>
           <table className="text-left rtl:text-right">
             <thead>
-              <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
+              <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
                 <td className="px-6 py-3">Notes UID</td>
                 <td className="px-6 py-3">DATE</td>
                 <td className="px-6 py-3">TIME</td>
                 <td className="px-6 py-3">SUBJECT</td>
-                <td className="px-6 py-3">DETAILS OF INCIDENT</td>
-                <td className="px-6 py-3">REPORTED BY</td>
-                <td className="w-[14px]"></td>
-              </tr>
+                <td className="px-6 py-3">DETAILS</td>
+                <td className="relative px-6 py-3">
+                  <p className="absolute right-[80px] top-[23px]">Action</p>
+                </td>              </tr>
             </thead>
-            <tbody className="h-[220px] overflow-y-scroll">
+            <tbody className="h-[254px]">
               {patientNotes.length === 0 && (
                 <h1 className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
                   <p className="text-center text-[15px] font-normal text-gray-700">
@@ -319,28 +329,37 @@ const Notes = () => {
                   </p>
                 </h1>
               )}
-              {patientNotes.map((notes, index) => (
+              {patientNotes.map((note, index) => (
                 <tr
                   key={index}
-                  className="group border-b odd:bg-white even:bg-gray-50 hover:bg-[#f4f4f4]"
+                  className="group border-b text-[15px] h-[63px] hover:bg-[#f4f4f4]"
                 >
                   <td className="px-6 py-3">
-                    <ResuableTooltip text={notes.notes_uuid} />
+                    <ResuableTooltip text={note.notes_uuid} />
                   </td>
                   <td className="px-6 py-3">
-                    {new Date(notes.notes_createdAt).toLocaleDateString()}
+                    {formatTableDate(note.notes_createdAt)}
                   </td>
                   <td className="px-6 py-3">
-                    {new Date(notes.notes_createdAt).toLocaleTimeString()}
+                    {formatCreatedTime(note.notes_createdAt)}
                   </td>
                   <td className="px-6 py-3">
-                    <ResuableTooltip text={notes.notes_subject} />
+                    <ResuableTooltip text={note.notes_subject} />
                   </td>
                   <td className="px-6 py-3">
-                    <ResuableTooltip text={notes.notes_notes} />
+                    <ResuableTooltip text={note.notes_notes} />
                   </td>
-                  <td className="px-6 py-3">
-                    <ResuableTooltip text="Ansel MD" />
+                  <td className="relative py-3 pl-6">
+                    <p
+                      onClick={() => {
+                        isModalOpen(true);
+                        setIsView(true);
+                        setPatientNotesData(note);
+                      }}
+                      className="absolute right-[40px] top-[11px]"
+                    >
+                      <View></View>
+                    </p>
                   </td>
                 </tr>
               ))}
@@ -364,7 +383,9 @@ const Notes = () => {
             <IncidentreportModalContent
               isModalOpen={isModalOpen}
               isOpen={isOpen}
-              label={isEdit ? "Edit Note" : "Add Note"}
+              isView={isView}
+              label={isView ? "View" : "Add"}
+              PatientNotesData={PatientNotesData}
               onSuccess={onSuccess}
             />
           }

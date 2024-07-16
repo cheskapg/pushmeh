@@ -229,7 +229,7 @@ const Scheduled = () => {
               </span>
             </div>
             <div>
-              <p className="my-1 h-[22px] text-[15px] font-normal text-[#64748B]">
+              <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalScheduledMeds} Scheduled Medication Logs
               </p>
             </div>
@@ -314,22 +314,22 @@ const Scheduled = () => {
           <div>
             <table className="text-left rtl:text-right">
               <thead>
-                <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
+                <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
                   <td className="px-6 py-3">Medication UID</td>
                   <td className="px-6 py-3">Date</td>
                   <td className="px-6 py-3">Time</td>
                   <td className="px-6 py-3">Medication</td>
                   <td className="px-6 py-3">Notes</td>
                   <td className="px-6 py-3">Status</td>
-                  <td className="px-9 py-3">Action</td>
-                  <td className="w-[14px]"></td>
+                  {/* <td className="px-6 py-3 "><p className="ml-[66px] w-[109px]">Action</p></td>    */}
+                  <td className="px-6 py-3 relative"><p className="absolute top-[23px] right-[80px]">Action</p></td>   
                 </tr>
-              </thead>
+              </thead>                                                                                                                                
               <tbody className="h-[254px]">
                 {patientScheduledMed.length === 0 && (
                   <tr>
                     <td className="border-1 absolute flex items-center justify-center py-5">
-                      <p className="flex text-center text-[15px] font-normal text-gray-700">
+                      <p className="text-center text-[15px] font-normal text-gray-700">
                         No Scheduled Medication Log/s <br />
                       </p>
                     </td>
@@ -340,7 +340,7 @@ const Scheduled = () => {
                     {patientScheduledMed.map((schedMed, index) => (
                       <tr
                         key={index}
-                        className="group border-b text-[15px] hover:bg-[#f4f4f4]"
+                        className="group border-b text-[15px]  h-[63px] hover:bg-[#f4f4f4]"
                       >
                         <td className="px-6 py-3">
                           <ResuableTooltip
@@ -352,7 +352,7 @@ const Scheduled = () => {
                             schedMed.medicationlogs_medicationLogsDate,
                           )}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-3">
                           {formatTableTime(
                             schedMed.medicationlogs_medicationLogsTime,
                           )}
@@ -368,8 +368,8 @@ const Scheduled = () => {
                             text={schedMed.medicationlogs_notes}
                           />
                         </td>
-                        <td className="text-15px me-1 flex items-center rounded-full px-3 py-5">
-                          <div
+                        <td className="text-15px flex items-center rounded-full px-6 py-5">
+                        <div
                             className={`relative flex h-[25px] w-[85px] items-center justify-center rounded-[30px] font-semibold ${
                               schedMed.medicationlogs_medicationLogStatus ===
                               "Given"
@@ -387,14 +387,15 @@ const Scheduled = () => {
                           </div>
                         </td>
 
-                        <td className="px-6 py-3">
-                          <p
+                        <td className="pl-6 py-3 relative ">
+                        <p
                             onClick={() => {
                               isModalOpen(true);
                               setIsEdit(true);
                               setScheduledMedData(schedMed);
                             }}
-                          >
+                            className="absolute top-[11px] right-[40px]"
+                            >
                             <Edit></Edit>
                           </p>
                         </td>

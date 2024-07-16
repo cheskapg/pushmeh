@@ -228,22 +228,22 @@ const Prorenata = () => {
               <span className="active">PRN</span>
             </div>
             <div>
-              <p className="h-[22px]v my-1 w-[1157px] text-[15px] font-normal text-[#64748B]">
+              <p className="h-[23px] my-1 text-[15px] font-normal text-[#64748B]">
                 Total of {totalPRNMeds} PRN Medication Logs
               </p>
             </div>
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
+              <Image src="/imgs/add.svg" alt="" width={18} height={18} />
               <p className="">Add</p>
             </button>
             <button className="btn-pdfs gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
-                width={22}
-                height={22}
+                width={18}
+                height={18}
               />
               <p className="">Generate PDF</p>
             </button>
@@ -257,7 +257,7 @@ const Prorenata = () => {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]  placeholder:text-[#64748B]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none border-[1px] border-[#E7EAEE]  placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -313,7 +313,7 @@ const Prorenata = () => {
           <div>
             <table className="text-left rtl:text-right">
               <thead>
-                <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
+                <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
                   <td className="px-6 py-3">Medication UID</td>
                   <td className="px-6 py-3">Date</td>
                   <td className="px-6 py-3">Time</td>
@@ -321,14 +321,14 @@ const Prorenata = () => {
                   <td className="px-6 py-3">Dosage</td>
                   <td className="px-6 py-3">Notes</td>
                   <td className="px-6 py-3">Status</td>
-                  <td className="px-9 py-3">Action</td>
-                  <td className="w-[14px]"></td>
+                  {/* <td className="px-6 py-3 "><p className="ml-[38px] w-[109px]">Action</p></td>    */}
+                  <td className="px-6 py-3 relative"><p className="absolute top-[23px] right-[80px]">Action</p></td>  
                 </tr>
               </thead>
               <tbody className="h-[254px] ">
                 {patientPRNMed.length === 0 && (
                   <tr>
-                    <td className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+                    <td className="border-1 absolute flex items-center justify-center py-5">
                       <p className="text-center text-[15px] font-normal text-gray-700">
                         No PRN Medication Log/s <br />
                       </p>
@@ -339,7 +339,7 @@ const Prorenata = () => {
                   <>
                     <tr
                       key={index}
-                      className="group  border-b text-[15px] hover:bg-[#f4f4f4]"
+                      className="group  h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                     >
                       <td className="px-6 py-3">
                         <ResuableTooltip text={prnMed.medicationlogs_uuid} />
@@ -347,7 +347,7 @@ const Prorenata = () => {
                       <td className="px-6 py-3">
                         {formatTableDate(
                           prnMed.medicationlogs_medicationLogsDate,
-                        )}{" "}
+                        )}
                       </td>
                       <td className="px-6 py-3">
                         {formatTableTime(
@@ -362,13 +362,13 @@ const Prorenata = () => {
                       </td>
                       <td className="px-6 py-3">
                         500mg
-                        {/* static value for dosage temporary*/}
+                        {/* static value for dosage temporary */}
                       </td>
 
                       <td className="px-6 py-3">
                         <ResuableTooltip text={prnMed.medicationlogs_notes} />
                       </td>
-                      <td className="text-15px me-1 flex items-center rounded-full px-3 py-5">
+                      <td className="text-15px flex items-center rounded-full px-6 py-5">
                         <div
                           className={`relative flex h-[25px] w-[85px] items-center justify-center rounded-[30px] font-semibold ${
                             prnMed.medicationlogs_medicationLogStatus ===
@@ -387,13 +387,14 @@ const Prorenata = () => {
                         </div>
                       </td>
 
-                      <td className="px-6 py-3">
+                      <td className="pl-6 py-3 relative ">
                         <p
                           onClick={() => {
                             isModalOpen(true);
                             setIsEdit(true);
                             setPRNData(prnMed);
                           }}
+                          className="absolute top-[11px] right-[40px]"
                         >
                           <Edit></Edit>
                         </p>
