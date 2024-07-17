@@ -296,14 +296,14 @@ export default function Laboratoryresults() {
           <table className="text-left rtl:text-right">
             <thead>
               <tr className="h-[70px] border-b text-[15px] font-semibold text-[#64748B]">
-                <td className="w-[200px] py-3 pl-6">LAB RESULT UID</td>
-                <td className="w-[160px] py-3 ">DATE</td>
-                <td className="w-[160px] py-3 ">HEMO A1c (%)</td>
-                <td className="w-[160px] py-3 ">FBG (mg/dL)</td>
-                <td className="w-[160px] py-3 ">TC (mg/dL)</td>
-                <td className="w-[160px] py-3 ">LDL-C (mg/dL)</td>
-                <td className="w-[160px] py-3 ">HDL-C (mg/dL)</td>
-                <td className="w-[160px] py-3 ">TG (mg/dL)</td>
+                <td className="w-[160px] py-3 pl-6">LAB RESULT UID</td>
+                <td className="w-[120px] py-3 ">DATE</td>
+                <td className="w-[120px] py-3 ">HEMO A1c (%)</td>
+                <td className="w-[120px] py-3 ">FBG (mg/dL)</td>
+                <td className="w-[120px] py-3 ">TC (mg/dL)</td>
+                <td className="w-[120px] py-3 ">LDL-C (mg/dL)</td>
+                <td className="w-[120px] py-3 ">HDL-C (mg/dL)</td>
+                <td className="w-[120px] py-3 ">TG (mg/dL)</td>
                 <td className="w-[220px] relative px-6 py-3">
                   <p className="absolute right-[114px]  top-[24px]">ACTION</p>
                 </td>
@@ -325,38 +325,38 @@ export default function Laboratoryresults() {
                     key={index}
                     className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                   >
-                    <td className="w-[200px] pl-6 py-3">
+                    <td className="w-[160px] pl-6 py-3">
                       <ResuableTooltip text={`${labResult.labResults_uuid}`} />
                       
                     </td>
-                    <td className="w-[160px] py-3 ">                        {formatTableDate(labResult.labResults_date)}
+                    <td className="w-[120px] py-3 ">                        {formatTableDate(labResult.labResults_date)}
                     </td>
-                    <td className="w-[160px]  py-3">
+                    <td className="w-[120px]  py-3">
                       <ResuableTooltip
                         text={`${labResult.labResults_hemoglobinA1c}%`}
                       />
                     </td>
-                    <td className="w-[160px] py-3 ">
+                    <td className="w-[120px] py-3 ">
                       <ResuableTooltip
                         text={`${labResult.labResults_fastingBloodGlucose}mg/dL`}
                       />
                     </td>
-                    <td className="w-[160px] py-3 ">
+                    <td className="w-[120px] py-3 ">
                       <ResuableTooltip
                         text={`${labResult.labResults_totalCholesterol}mg/dL`}
                       />
                     </td>
-                    <td className="w-[160px] py-3 ">
+                    <td className="w-[120px] py-3 ">
                       <ResuableTooltip
                         text={`${labResult.labResults_ldlCholesterol}mg/dL`}
                       />
                     </td>
-                    <td className="w-[160px] py-3 ">
+                    <td className="w-[120px] py-3 ">
                       <ResuableTooltip
                         text={`${labResult.labResults_hdlCholesterol}mg/dL`}
                       />
                     </td>
-                    <td className="w-[160px] py-3">
+                    <td className="w-[120px] py-3">
                       <ResuableTooltip
                         text={`${labResult.labResults_triglycerides}mg/dL`}
                       />
