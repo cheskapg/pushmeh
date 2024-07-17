@@ -114,8 +114,8 @@ const PdfDownloader = ({ data, props, variant }: any) => {
   };
   return (
     <button className="btn-pdf gap-2" onClick={handleDownloadPDF}>
-      <Image src="/imgs/downloadpdf.svg" alt="" width={22} height={22} />
-      <p className="text-[18px]">Generate PDF</p>
+      <Image src="/imgs/downloadpdf.svg" alt="" width={18} height={18} />
+      <p className="text-[15px]">Generate PDF</p>
     </button>
   );
 };
