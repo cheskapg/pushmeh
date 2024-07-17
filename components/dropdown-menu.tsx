@@ -123,10 +123,10 @@ const DropdownMenu = ({
   };
 
   return (
-    <div className={`w-full max-w-[166px] z-10 w-${width} `} ref={menuRef}>
+    <div className={`w-full max-w-[166px] w-${width} `} ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center justify-between rounded-[5px] h-[47px] bg-white  text-[15px] font-semibold text-[#191D23] ${!isCheckBox ? "w-full text-opacity-60 p-4 drop-shadow-dropDown" : "uppercase text-[#64748B]"}`}
+        className={`flex items-center justify-between   rounded-[5px] h-[47px] bg-white  text-[15px] font-semibold text-[#191D23] ${!isCheckBox ? "w-full text-opacity-60 p-4 drop-shadow-dropDown" : "uppercase text-[#64748B]"}`}
       >
         <span className="ml-3">
           {optionLabel}
@@ -141,7 +141,7 @@ const DropdownMenu = ({
       </button>
 
       {isOpen && !isCheckBox ? (
-        <div className="absolute mt-2 flex w-[165px] cursor-pointer flex-col rounded-[3px] bg-white p-4 text-[15px]  drop-shadow-dropDownContent">
+        <div className="absolute mt-2 flex w-[165px] cursor-pointer flex-col rounded-[3px] bg-white p-4 text-[15px] z-10  drop-shadow-dropDownContent">
           {options.map((option, index) => (
             <div
               key={index}

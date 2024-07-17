@@ -255,7 +255,7 @@ const Notes = () => {
                 <td className="px-6 py-3">SUBJECT</td>
                 <td className="px-6 py-3">NOTES</td>
                 <td className="relative px-6 py-3">
-                  <p className="absolute right-[80px] top-[23px]">Action</p>
+                  <p className="absolute right-[80px] top-[24px]">Action</p>
                 </td>
               </tr>
             </thead>

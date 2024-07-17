@@ -259,7 +259,7 @@ const Prorenata = () => {
                   <td className="px-6 py-3">Status</td>
                   {/* <td className="px-6 py-3 "><p className="ml-[38px] w-[109px]">Action</p></td>    */}
                   <td className="relative px-6 py-3">
-                    <p className="absolute right-[80px] top-[23px]">Action</p>
+                    <p className="absolute right-[80px] top-[24px]">Action</p>
                   </td>
                 </tr>
               </thead>
@@ -306,18 +306,18 @@ const Prorenata = () => {
                       <td className="px-6 py-3">
                         <ResuableTooltip text={prnMed.medicationlogs_notes} />
                       </td>
-                      <td className="text-15px rounded-full px-6 ">
+                      <td className="text-15px rounded-full px-6">
                         <div
-                          className={` relative flex w-[85px] items-center justify-center rounded-[30px] font-semibold ${
+                          className={`relative flex w-[85px] items-center justify-center rounded-[30px] font-semibold ${
                             prnMed.medicationlogs_medicationLogStatus ===
                             "Given"
-                              ? "bg-[#CCFFDD]  text-[#17C653]" // Green color for Given
+                              ? "bg-[#CCFFDD] text-[#17C653]" // Green color for Given
                               : prnMed.medicationlogs_medicationLogStatus ===
                                   "Held"
-                                ? "h-[25px] bg-[#FFF8DD] px-7 text-center  text-[#F6C000]" // Dark color for Held
+                                ? "h-[25px] bg-[#FFF8DD] px-7 text-center text-[#F6C000]" // Dark color for Held
                                 : prnMed.medicationlogs_medicationLogStatus ===
                                     "Refused"
-                                  ? "h-[25px] w-[85px] bg-[#FFE8EC]  text-[#DB3956]" // Red color for Refused
+                                  ? "h-[25px] w-[85px] bg-[#FFE8EC] text-[#DB3956]" // Red color for Refused
                                   : prnMed.medicationlogs_medicationLogStatus
                           }`}
                         >

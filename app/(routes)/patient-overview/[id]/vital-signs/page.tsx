@@ -21,7 +21,7 @@ export default function vitalsigns() {
   }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
-  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortOrder, setSortOrder] = useState("DESC");
   const [sortBy, setSortBy] = useState("createdAt");
   const [pageNumber, setPageNumber] = useState("");
   const [patientVitalSign, setPatientVitalSign] = useState<any[]>([]);
@@ -69,7 +69,7 @@ export default function vitalsigns() {
   const handleSortOptionClick = (option: string) => {
     setIsOpenSortedBy(false);
     if (option === "Date") {
-      setSortBy("createdAt");
+      setSortBy("date");
     } else if (option === "Status") {
       setSortBy("bloodPressure");
     } else {
@@ -233,8 +233,8 @@ export default function vitalsigns() {
                 <td className="px-6 py-3">TEMP (°F)</td>
                 <td className="px-6 py-3">RESP (brtds/min)</td>
                 <td className="relative px-6 py-3">
-                  <p className="absolute right-[80px] top-[23px]">ACTION</p>
-                </td>{" "}
+                  <p className="absolute right-[80px] top-[24px]">ACTION</p>
+                </td>
               </tr>
             </thead>
 
@@ -250,7 +250,7 @@ export default function vitalsigns() {
                 <tr
                   key={index}
                   className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
-                  >
+                >
                   <td className="px-6 py-3">
                     <ResuableTooltip text={vitalSign.vitalsign_uuid} />
                   </td>
@@ -278,7 +278,7 @@ export default function vitalsigns() {
                   </td>
 
                   <td className="relative py-3 pl-6">
-                  <p
+                    <p
                       onClick={() => {
                         isModalOpen(true);
                         setIsEdit(true);

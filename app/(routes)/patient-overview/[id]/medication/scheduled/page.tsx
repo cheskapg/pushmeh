@@ -301,7 +301,7 @@ const Scheduled = () => {
                   <td className="px-6 py-3">Status</td>
                   {/* <td className="px-6 py-3 "><p className="ml-[66px] w-[109px]">Action</p></td>    */}
                   <td className="relative px-6 py-3">
-                    <p className="absolute right-[80px] top-[23px]">Action</p>
+                    <p className="absolute right-[80px] top-[24px]">Action</p>
                   </td>
                 </tr>
               </thead>
@@ -348,8 +348,8 @@ const Scheduled = () => {
                             text={schedMed.medicationlogs_notes}
                           />
                         </td>
-                        <td className="text-15px rounded-full px-6 ">
-                        <div
+                        <td className="text-15px rounded-full px-6">
+                          <div
                             className={`relative flex h-[25px] w-[85px] items-center justify-center rounded-[30px] font-semibold ${
                               schedMed.medicationlogs_medicationLogStatus ===
                               "Given"
