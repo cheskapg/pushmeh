@@ -2,11 +2,8 @@
 
 import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
-import Add from "@/components/shared/buttons/add";
-import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/edit";
 import { useState } from "react";
-import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { fetchScheduledMedByPatient } from "@/app/api/medication-logs-api/scheduled-med-api";
 import { ErrorModal } from "@/components/shared/error";
@@ -43,12 +40,6 @@ const Scheduled = () => {
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
 
-  interface Modalprops {
-    label: string;
-    isOpen: boolean;
-    isModalOpen: (isOpen: boolean) => void;
-  }
-
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
     if (isOpen) {
@@ -57,19 +48,6 @@ const Scheduled = () => {
       document.body.style.overflow = "visible";
       setIsEdit(false);
       setScheduledMedData([]);
-    }
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Function to handle going to next page
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
     }
   };
 
@@ -229,7 +207,7 @@ const Scheduled = () => {
               </span>
             </div>
             <div>
-              <p className="my-1 h-[22px] text-[15px] font-normal text-[#64748B]">
+              <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalScheduledMeds} Scheduled Medication Logs
               </p>
             </div>
@@ -239,7 +217,7 @@ const Scheduled = () => {
               <Image src="/imgs/add.svg" alt="" width={18} height={18} />
               <p className="">Add</p>
             </button>
-            <button className="btn-pdfs gap-2">
+            <button className="btn-pdf gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
@@ -314,22 +292,26 @@ const Scheduled = () => {
           <div>
             <table className="text-left rtl:text-right">
               <thead>
-                <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
+                <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
                   <td className="px-6 py-3">Medication UID</td>
                   <td className="px-6 py-3">Date</td>
                   <td className="px-6 py-3">Time</td>
                   <td className="px-6 py-3">Medication</td>
+                  <td className="px-6 py-3">Dosage</td>
                   <td className="px-6 py-3">Notes</td>
-                  <td className="px-6 py-3">Status</td>
-                  <td className="px-9 py-3">Action</td>
-                  <td className="w-[14px]"></td>
+                  <td className="relative px-6 py-3">
+                  <p className="absolute right-[60px] top-[24px]">Status</p>
+                </td>                   {/* <td className="px-6 py-3 "><p className="ml-[66px] w-[109px]">Action</p></td>    */}
+                  <td className="relative px-6 py-3">
+                    <p className="absolute right-[80px] top-[24px]">Action</p>
+                  </td>
                 </tr>
               </thead>
               <tbody className="h-[254px]">
                 {patientScheduledMed.length === 0 && (
                   <tr>
                     <td className="border-1 absolute flex items-center justify-center py-5">
-                      <p className="flex text-center text-[15px] font-normal text-gray-700">
+                      <p className="text-center text-[15px] font-normal text-gray-700">
                         No Scheduled Medication Log/s <br />
                       </p>
                     </td>
@@ -340,7 +322,7 @@ const Scheduled = () => {
                     {patientScheduledMed.map((schedMed, index) => (
                       <tr
                         key={index}
-                        className="group border-b text-[15px] hover:bg-[#f4f4f4]"
+                        className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                       >
                         <td className="px-6 py-3">
                           <ResuableTooltip
@@ -352,7 +334,7 @@ const Scheduled = () => {
                             schedMed.medicationlogs_medicationLogsDate,
                           )}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-3">
                           {formatTableTime(
                             schedMed.medicationlogs_medicationLogsTime,
                           )}
@@ -363,23 +345,28 @@ const Scheduled = () => {
                             text={schedMed.medicationlogs_medicationLogsName}
                           />
                         </td>
+                      
                         <td className="px-6 py-3">
                           <ResuableTooltip
                             text={schedMed.medicationlogs_notes}
                           />
                         </td>
-                        <td className="text-15px me-1 flex items-center rounded-full px-3 py-5">
-                          <div
-                            className={`relative flex h-[25px] w-[85px] items-center justify-center rounded-[30px] font-semibold ${
+                        <td className="px-6 py-3">
+                        500mg
+                        {/* static value for dosage temporary */}
+                      </td>
+                        <td className="relative pl-6">
+                        <div
+                            className={` absolute right-[36px] top-[18px]  flex h-[25px] w-[85px] items-center justify-center rounded-[30px] font-semibold ${
                               schedMed.medicationlogs_medicationLogStatus ===
                               "Given"
-                                ? "bg-[#CCFFDD] text-[15px] text-[#17C653]" // Green color for Given
+                                ? "bg-[#CCFFDD] text-[#17C653]" // Green color for Given
                                 : schedMed.medicationlogs_medicationLogStatus ===
                                     "Held"
-                                  ? "h-[25px] bg-[#FFF8DD] px-7 text-center text-[15px] text-[#F6C000]" // Dark color for Held
+                                  ? "h-[25px] bg-[#FFF8DD] px-7 text-center  text-[#F6C000]" // Dark color for Held
                                   : schedMed.medicationlogs_medicationLogStatus ===
                                       "Refused"
-                                    ? "h-[25px] w-[85px] bg-[#FFE8EC] text-[15px] text-[#DB3956]" // Red color for Refused
+                                    ? "h-[25px] w-[85px] bg-[#FFE8EC]  text-[#DB3956]" // Red color for Refused
                                     : schedMed.medicationlogs_medicationLogStatus
                             }`}
                           >
@@ -387,13 +374,14 @@ const Scheduled = () => {
                           </div>
                         </td>
 
-                        <td className="px-6 py-3">
+                        <td className="relative py-3 pl-6">
                           <p
                             onClick={() => {
                               isModalOpen(true);
                               setIsEdit(true);
                               setScheduledMedData(schedMed);
                             }}
+                            className="absolute right-[40px] top-[11px]"
                           >
                             <Edit></Edit>
                           </p>

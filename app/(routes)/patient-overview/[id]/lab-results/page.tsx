@@ -15,6 +15,7 @@ import { LabresultsModalContent } from "@/components/modal-content/labresults-mo
 import { LabResultsViewModalContent } from "@/components/modal-content/labresultsview-modal-content";
 import Pagination from "@/components/shared/pagination";
 import ResuableTooltip from "@/components/reusable/tooltip";
+import { formatTableDate } from "@/lib/utils";
 export default function Laboratoryresults() {
   const router = useRouter();
   if (typeof window === "undefined") {
@@ -36,8 +37,8 @@ export default function Laboratoryresults() {
   const [term, setTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
-  const [sortOrder, setSortOrder] = useState<string>("ASC");
-  const [sortBy, setSortBy] = useState("uuid");
+  const [sortOrder, setSortOrder] = useState<string>("DESC");
+  const [sortBy, setSortBy] = useState("createdAt");
   const [isEdit, setIsEdit] = useState(false);
   const [isView, setIsView] = useState(false);
 
@@ -70,63 +71,6 @@ export default function Laboratoryresults() {
     }
   };
 
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Function to handle going to next page
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const pageNumberInt = parseInt(pageNumber, 10);
-
-    // Check if pageNumber is a valid number and greater than 0
-    if (
-      !isNaN(pageNumberInt) &&
-      pageNumberInt <= totalPages &&
-      pageNumberInt > 0
-    ) {
-      setCurrentPage(pageNumberInt);
-
-      console.log("Navigate to page:", pageNumberInt);
-    } else {
-      setGotoError(true);
-      setTimeout(() => {
-        setGotoError(false);
-      }, 3000);
-      console.error("Invalid page number:", pageNumber);
-    }
-  };
-
-  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(e.target.value);
-  };
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          className={`border-px flex w-[49px] items-center justify-center border ${
-            currentPage === i ? "btn-pagination" : ""
-          }`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </button>,
-      );
-    }
-    return pageNumbers;
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -208,24 +152,24 @@ export default function Laboratoryresults() {
             <p className="p-table-title">Laboratory Results </p>
             {/* number of patients */}
             <div>
-              <p className="h-[22px] w-[1157px] text-[15px] font-normal text-[#64748B]">
+              <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalLabResults} Lab Results
               </p>
             </div>
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
-              <p className="text-[18px]">Add</p>
+              <Image src="/imgs/add.svg" alt="" width={18} height={18} />
+              <p className="">Add</p>
             </button>
-            <button className="btn-pdfs gap-2">
+            <button className="btn-pdf gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
-                width={22}
-                height={22}
+                width={18}
+                height={18}
               />
-              <p className="text-[18px]">Generate PDF</p>
+              <p className="">Generate PDF</p>
             </button>
           </div>
         </div>
@@ -237,7 +181,7 @@ export default function Laboratoryresults() {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[573px] bg-[calc(100%-20px)] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] border-[1px] border-[#E7EAEE] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -251,7 +195,7 @@ export default function Laboratoryresults() {
                   alt="Search"
                   width="20"
                   height="20"
-                  className="pointer-events-none absolute left-8 top-9"
+                  className="pointer-events-none absolute left-8 top-8"
                 />
               </div>
             </form>
@@ -294,21 +238,23 @@ export default function Laboratoryresults() {
         <div>
           <table className="text-left rtl:text-right">
             <thead>
-              <tr className="h-[70px] border-y text-[15px] font-semibold text-[#64748B]">
-                <td className="w-[170px] px-6 py-3">LAB RESULT UID</td>
-                <td className="w-[170px] px-6 py-3">DATE</td>
-                <td className="w-[170px] px-6 py-3">HEMO A1c (%)</td>
-                <td className="w-[170px] px-6 py-3">FBG (mg/dL)</td>
-                <td className="w-[170px] px-6 py-3">TC (mg/dL)</td>
-                <td className="w-[170px] px-6 py-3">LDL-C (mg/dL)</td>
-                <td className="w-[170px] px-6 py-3">HDL-C (mg/dL)</td>
-                <td className="w-[170px] px-6 py-3">TG (mg/dL)</td>
-                <td className="px-6 py-3 text-center">ACTION</td>
-                <td className="w-[14px]"></td>
+              <tr className="h-[70px] border-b text-[15px] font-semibold text-[#64748B]">
+                <td className="w-[160px] py-3 pl-6">LAB RESULT UID</td>
+                <td className="w-[120px] py-3 ">DATE</td>
+                <td className="w-[120px] py-3 ">HEMO A1c (%)</td>
+                <td className="w-[120px] py-3 ">FBG (mg/dL)</td>
+                <td className="w-[120px] py-3 ">TC (mg/dL)</td>
+                <td className="w-[120px] py-3 ">LDL-C (mg/dL)</td>
+                <td className="w-[120px] py-3 ">HDL-C (mg/dL)</td>
+                <td className="w-[120px] py-3 ">TG (mg/dL)</td>
+                <td className="w-[220px] relative px-6 py-3">
+                  <p className="absolute right-[114px]  top-[24px]">ACTION</p>
+                </td>
+             
               </tr>
             </thead>
 
-            <tbody className="h-[220px] overflow-y-scroll">
+            <tbody className="h-[254px]">
               {patientLabResults.length === 0 && (
                 <div className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
                   <p className="text-center text-[15px] font-normal text-gray-700">
@@ -320,51 +266,52 @@ export default function Laboratoryresults() {
                 {patientLabResults.map((labResult, index) => (
                   <tr
                     key={index}
-                    className="group border-b text-[15px] odd:bg-white hover:bg-[#f4f4f4]"
+                    className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                   >
-                    <td className="w-[170px] px-6 py-3">
+                    <td className="w-[160px] pl-6 py-3">
                       <ResuableTooltip text={`${labResult.labResults_uuid}`} />
+                      
                     </td>
-                    <td className="w-[170px] px-6 py-3">
-                      {labResult.labResults_date}
+                    <td className="w-[120px] py-3 ">                        {formatTableDate(labResult.labResults_date)}
                     </td>
-                    <td className="w-[170px] px-6 py-3">
+                    <td className="w-[120px]  py-3">
                       <ResuableTooltip
                         text={`${labResult.labResults_hemoglobinA1c}%`}
                       />
                     </td>
-                    <td className="w-[170px] px-6 py-3">
+                    <td className="w-[120px] py-3 ">
                       <ResuableTooltip
                         text={`${labResult.labResults_fastingBloodGlucose}mg/dL`}
                       />
                     </td>
-                    <td className="w-[170px] px-6 py-3">
+                    <td className="w-[120px] py-3 ">
                       <ResuableTooltip
                         text={`${labResult.labResults_totalCholesterol}mg/dL`}
                       />
                     </td>
-                    <td className="w-[170px] px-6 py-3">
+                    <td className="w-[120px] py-3 ">
                       <ResuableTooltip
                         text={`${labResult.labResults_ldlCholesterol}mg/dL`}
                       />
                     </td>
-                    <td className="w-[170px] px-6 py-3">
+                    <td className="w-[120px] py-3 ">
                       <ResuableTooltip
                         text={`${labResult.labResults_hdlCholesterol}mg/dL`}
                       />
                     </td>
-                    <td className="w-[170px] px-6 py-3">
+                    <td className="w-[120px] py-3">
                       <ResuableTooltip
                         text={`${labResult.labResults_triglycerides}mg/dL`}
                       />
                     </td>
-                    <td className="flex justify-center gap-2 px-6 py-3">
+                    <td className="py-3 relative w-[220px] ">
                       <p
                         onClick={() => {
                           isModalOpen(true);
                           setIsEdit(true);
                           setLabResultData(labResult);
                         }}
+                        className="absolute right-[146px] top-[11px]"
                       >
                         <Edit></Edit>
                       </p>
@@ -375,6 +322,8 @@ export default function Laboratoryresults() {
 
                           setLabResultData(labResult);
                         }}
+                        className="absolute right-[40px] top-[11px]"
+
                       >
                         <View></View>
                       </p>

@@ -3,15 +3,11 @@ import Image from "next/image";
 import printJS from "print-js";
 import React, { useEffect } from "react";
 import DropdownMenu from "@/components/dropdown-menu";
-import Add from "@/components/shared/buttons/add";
-import DownloadPDF from "@/components/shared/buttons/downloadpdf";
 import Edit from "@/components/shared/buttons/edit";
 import { useState } from "react";
-import { onNavigate } from "@/actions/navigation";
 import { useParams, useRouter } from "next/navigation";
 import {
   fetchAllergiesByPatient,
-  fetchAllergiesForPDF,
 } from "@/app/api/medical-history-api/allergies.api";
 import { SuccessModal } from "@/components/shared/success";
 import { ErrorModal } from "@/components/shared/error";
@@ -22,6 +18,7 @@ import { useToast } from "@/components/ui/use-toast";
 import Pagination from "@/components/shared/pagination";
 import PdfDownloader from "@/components/pdfAllergiesDownloader";
 import ResuableTooltip from "@/components/reusable/tooltip";
+import { formatTableDate } from "@/lib/utils";
 
 const Allergies = () => {
   const router = useRouter();
@@ -40,13 +37,12 @@ const Allergies = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState("");
   const [term, setTerm] = useState<string>("");
-  const [sortBy, setSortBy] = useState("Type");
+  const [sortBy, setSortBy] = useState("Severity");
   const [isEdit, setIsEdit] = useState(false);
   const [allergyToEdit, setAllergyToEdit] = useState<any[]>([]);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
-  const [isDownloadPDF, setIsDownloadPDF] = useState<boolean>(false);
 
   const params = useParams<{
     id: any;
@@ -95,63 +91,6 @@ const Allergies = () => {
     }
   };
 
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Function to handle going to next page
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const pageNumberInt = parseInt(pageNumber, 10);
-
-    // Check if pageNumber is a valid number and greater than 0
-    if (
-      !isNaN(pageNumberInt) &&
-      pageNumberInt <= totalPages &&
-      pageNumberInt > 0
-    ) {
-      setCurrentPage(pageNumberInt);
-
-      console.log("Navigate to page:", pageNumberInt);
-    } else {
-      setGotoError(true);
-      setTimeout(() => {
-        setGotoError(false);
-      }, 3000);
-      console.error("Invalid page number:", pageNumber);
-    }
-  };
-
-  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(e.target.value);
-  };
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          className={`flex w-[49px] items-center justify-center ring-1 ring-gray-300 ${
-            currentPage === i ? "btn-pagination" : ""
-          }`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </button>,
-      );
-    }
-    return pageNumbers;
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -224,15 +163,15 @@ const Allergies = () => {
               </span>
             </div>
             <div>
-              <p className="h-[22px] w-[1157px] text-[15px] font-normal text-[#64748B]">
-                Total of {totalAllergies} Allergies
+            <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
+            Total of {totalAllergies} Allergies
               </p>
             </div>
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
-              <p className="text-[18px]">Add</p>
+              <Image src="/imgs/add.svg" alt="" width={18} height={18} />
+              <p className="">Add</p>
             </button>
 
             <PdfDownloader
@@ -251,13 +190,13 @@ const Allergies = () => {
           </div>
         </div>
         <div className="m:rounded-lg w-full items-center">
-          <div className="flex h-[75px] w-full items-center justify-between bg-[#F4F4F4]">
-            <form className="relative mr-5">
+        <div className="flex h-[75px] w-full items-center justify-between bg-[#F4F4F4]">
+        <form className="relative mr-5">
               {/* search bar */}
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[573px] bg-[calc(100%-20px)] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[15px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] border-[1px] border-[#E7EAEE] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -271,7 +210,7 @@ const Allergies = () => {
                   alt="Search"
                   width="20"
                   height="20"
-                  className="pointer-events-none absolute left-8 top-9"
+                  className="pointer-events-none absolute left-8 top-8"
                 />
               </div>
             </form>
@@ -312,21 +251,22 @@ const Allergies = () => {
         <div>
           <table className="text-left rtl:text-right">
             <thead>
-              <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
-                <td className="px-6 py-3">Allergy ID</td>
+            <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
+            <td className="px-6 py-3">Allergy UID</td>
                 <td className="px-6 py-3">Date</td>
                 <td className="px-6 py-3">Type</td>
                 <td className="px-6 py-3">Allergen</td>
                 <td className="px-6 py-3">Severity</td>
                 <td className="px-6 py-3">Reaction</td>
                 <td className="px-6 py-3">Notes</td>
-                <td className="px-6 py-3 text-center">Action</td>
-                <td className="w-[14px]"></td>
-              </tr>
+                <td className="relative px-6 py-3">
+                    <p className="absolute right-[80px] top-[24px]">Action</p>
+                  </td>             
+                   </tr>
             </thead>
-            <tbody className="h-[220px] overflow-y-scroll">
-              {patientAllergies.length === 0 && (
-                <h1 className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+            <tbody className="h-[254px]">
+            {patientAllergies.length === 0 && (
+                <h1 className="border-1 absolute flex items-center justify-center py-5">
                   <p className="text-center text-[15px] font-normal text-gray-700">
                     No Allergies Found <br />
                   </p>
@@ -335,14 +275,14 @@ const Allergies = () => {
               {patientAllergies.map((allergy, index) => (
                 <tr
                   key={index}
-                  className="group border-b text-[15px] hover:bg-[#f4f4f4]"
+                  className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                 >
                   <td className="px-6 py-3">
                     <ResuableTooltip text={allergy.allergies_uuid} />
                   </td>
                   <td className="px-6 py-3">
-                    {" "}
-                    {new Date(allergy.allergies_createdAt).toLocaleDateString()}
+                   
+                    {formatTableDate(allergy.allergies_createdAt)}
                   </td>
                   <td className="px-6 py-3">
                     <ResuableTooltip text={allergy.allergies_type} />
@@ -353,13 +293,13 @@ const Allergies = () => {
 
                   <td className="text-15px me-1 flex items-center rounded-full px-6 py-3">
                     <div
-                      className={`relative flex items-center rounded-[20px] px-2 font-semibold ${
+                      className={`relative flex h-[25px] w-[92px] items-center justify-center rounded-[30px] font-semibold ${
                         allergy.allergies_severity === "Mild"
-                          ? "bg-[#FFF8DD] text-[15px] text-[#F6C000]" // Green color for Mild
+                          ? "bg-[#FFF8DD] text-[#F6C000]" // Green color for Mild
                           : allergy.allergies_severity === "Moderate"
-                            ? "bg-[#fff5ef] text-[15px] text-[#ff6f1e]" // Dark color for Moderate
+                            ? "bg-[#fff5ef] text-[#ff6f1e]" // Dark color for Moderate
                             : allergy.allergies_severity === "Severe"
-                              ? "bg-[#FFE8EC] text-[15px] text-[#EF4C6A]" // Red color for Severe
+                              ? "bg-[#FFE8EC] text-[#EF4C6A]" // Red color for Severe
                               : ""
                       }`}
                     >
@@ -379,13 +319,15 @@ const Allergies = () => {
                     />
                   </td>
 
-                  <td className="flex justify-center px-6 py-3">
-                    <p
+                  <td className="relative py-3 pl-6">
+                  <p
                       onClick={() => {
                         isModalOpen(true);
                         setIsEdit(true);
                         setAllergyToEdit(allergy);
                       }}
+                      className="absolute right-[40px] top-[11px]"
+
                     >
                       <Edit></Edit>
                     </p>

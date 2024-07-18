@@ -14,6 +14,7 @@ import { SurgeriesModalContent } from "@/components/modal-content/surgeries-moda
 import Modal from "@/components/reusable/modal";
 import Pagination from "@/components/shared/pagination";
 import ResuableTooltip from "@/components/reusable/tooltip";
+import { formatTableDate } from "@/lib/utils";
 
 export default function Surgeries() {
   if (typeof window === "undefined") {
@@ -86,76 +87,6 @@ export default function Surgeries() {
       setIsEdit(false);
       setSurgeryData([]);
     }
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Function to handle going to next page
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const pageNumberInt = parseInt(pageNumber, 10);
-
-    // Check if pageNumber is a valid number and greater than 0
-    if (
-      !isNaN(pageNumberInt) &&
-      pageNumberInt <= totalPages &&
-      pageNumberInt > 0
-    ) {
-      setCurrentPage(pageNumberInt);
-
-      console.log("Navigate to page:", pageNumberInt);
-    } else {
-      setGotoError(true);
-      setTimeout(() => {
-        setGotoError(false);
-      }, 3000);
-      console.error("Invalid page number:", pageNumber);
-    }
-  };
-  const formatDate = (dateOfSurgery: string | number | Date) => {
-    // Create a new Date object from the provided createdAt date string
-    const date = new Date(dateOfSurgery);
-
-    // Get the month, day, and year
-    const month = date.toLocaleString("default", { month: "short" });
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    const formattedDate = `${month} ${day}, ${year}`;
-
-    return formattedDate;
-  };
-  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(e.target.value);
-  };
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          className={`flex w-[49px] items-center justify-center ring-1 ring-gray-300 ${
-            currentPage === i ? "btn-pagination" : ""
-          }`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </button>,
-      );
-    }
-    return pageNumbers;
   };
 
   useEffect(() => {
@@ -233,24 +164,24 @@ export default function Surgeries() {
               <p className="active">Surgeries</p>
             </div>
             <div>
-              <p className="h-[22px] w-[1157px] text-[15px] font-normal text-[#64748B]">
+            <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalSurgeries} Surgeries
               </p>
             </div>
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
-              <p className="text-[18px]">Add</p>
+              <Image src="/imgs/add.svg" alt="" width={18} height={18} />
+              <p className="">Add</p>
             </button>
-            <button className="btn-pdfs gap-2">
+            <button className="btn-pdf gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
-                width={22}
-                height={22}
+                width={18}
+                height={18}
               />
-              <p className="text-[18px]">Generate PDF</p>
+              <p className="">Generate PDF</p>
             </button>
           </div>
         </div>
@@ -262,7 +193,7 @@ export default function Surgeries() {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[573px] bg-[calc(100%-20px)] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[15px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] border-[1px] border-[#E7EAEE] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -276,7 +207,7 @@ export default function Surgeries() {
                   alt="Search"
                   width="20"
                   height="20"
-                  className="pointer-events-none absolute left-8 top-9"
+                  className="pointer-events-none absolute left-8 top-8"
                 />
               </div>
             </form>
@@ -318,34 +249,35 @@ export default function Surgeries() {
         <div>
           <table className="text-left rtl:text-right">
             <thead>
-              <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
+            <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
                 <td className="px-6 py-3">Surgery ID </td>
                 <td className="px-6 py-3">DATE OF SURGERY</td>
                 <td className="px-6 py-3">TYPE</td>
                 <td className="px-6 py-3">SURGERY</td>
                 <td className="px-6 py-3">NOTES</td>
-                <td className="px-6 py-3 text-center">Action</td>
-                <td className="w-[14px]"></td>
+                <td className="relative px-6 py-3">
+                  <p className="absolute right-[80px] top-[24px]">Action</p>
+                </td>
               </tr>
             </thead>
-            <tbody className="h-[220px] overflow-y-scroll">
+            <tbody className="h-[254px]">
               {patientSurgeries.length == 0 && (
-                <div className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+                <h1 className="border-1 absolute flex items-center justify-center py-5">
                   <p className="text-center text-[15px] font-normal text-gray-700">
                     No Surgeries Found <br />
                   </p>
-                </div>
+                </h1>
               )}
               {patientSurgeries.map((surgery, index) => (
                 <tr
                   key={index}
-                  className="group border-b text-[15px] hover:bg-[#f4f4f4]"
+                  className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                 >
                   <td className="px-6 py-3">
                     <ResuableTooltip text={surgery.surgeries_uuid} />
                   </td>
                   <td className="px-6 py-3">
-                    {formatDate(surgery.surgeries_dateOfSurgery)}
+                    {formatTableDate(surgery.surgeries_dateOfSurgery)}
                   </td>
                   <td className="px-6 py-3">
                     <ResuableTooltip text={surgery.surgeries_typeOfSurgery} />
@@ -356,13 +288,14 @@ export default function Surgeries() {
                   <td className="px-6 py-3">
                     <ResuableTooltip text={surgery.surgeries_notes} />
                   </td>
-                  <td className="flex justify-center px-6 py-3">
+                  <td className="relative py-3 pl-6">
                     <div
                       onClick={() => {
                         isModalOpen(true);
                         setIsEdit(true);
                         setSurgeryData(surgery);
                       }}
+                      className="absolute right-[40px] top-[11px]"
                     >
                       <Edit></Edit>
                     </div>

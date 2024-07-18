@@ -75,6 +75,31 @@ export const formatTableTime = (timeString: any) => {
 
   return formattedTimeWithoutSpace.toLowerCase();
 };
+
+export const formatCreatedTime = (dateTimeString: string) => {
+  // Parse the date-time string into a Date object
+  const date = new Date(dateTimeString);
+
+
+  // Format the time to the desired format
+  const formattedTime = date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+  // Remove the space between the time and the AM/PM marker and convert to lowercase
+  const formattedTimeWithoutSpace = formattedTime.replace(/([\d]+:[\d]+)\s([aApP][mM])/, '$1$2').toLowerCase();
+
+  return formattedTimeWithoutSpace;
+};
+
+// Example usage
+const dateTimeString = '2024-05-02T23:34:32.957Z';
+const formattedTime = formatCreatedTime(dateTimeString);
+console.log(formattedTime); // Output: "7:00am"
+
+
 export function formatTableDate(dateString: string | number | Date): string {
   // Create a new Date object from the provided date
   const date = new Date(dateString);

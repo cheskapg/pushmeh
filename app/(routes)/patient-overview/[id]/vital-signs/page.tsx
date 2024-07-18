@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
-
+import { formatTableTime } from "@/lib/utils";
+import { formatTableDate } from "@/lib/utils";
 import DropdownMenu from "@/components/dropdown-menu";
 import Add from "@/components/shared/buttons/add";
 import DownloadPDF from "@/components/shared/buttons/downloadpdf";
@@ -20,7 +21,7 @@ export default function vitalsigns() {
   }
   // start of orderby & sortby function
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
-  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortOrder, setSortOrder] = useState("DESC");
   const [sortBy, setSortBy] = useState("createdAt");
   const [pageNumber, setPageNumber] = useState("");
   const [patientVitalSign, setPatientVitalSign] = useState<any[]>([]);
@@ -36,11 +37,7 @@ export default function vitalsigns() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
-  interface Modalprops {
-    label: string;
-    isOpen: boolean;
-    isModalOpen: (isOpen: boolean) => void;
-  }
+
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
     if (isOpen) {
@@ -49,19 +46,6 @@ export default function vitalsigns() {
       document.body.style.overflow = "visible";
       setIsEdit(false);
       setVitalSignData([]);
-    }
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Function to handle going to next page
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
     }
   };
 
@@ -85,7 +69,7 @@ export default function vitalsigns() {
   const handleSortOptionClick = (option: string) => {
     setIsOpenSortedBy(false);
     if (option === "Date") {
-      setSortBy("createdAt");
+      setSortBy("date");
     } else if (option === "Status") {
       setSortBy("bloodPressure");
     } else {
@@ -102,60 +86,6 @@ export default function vitalsigns() {
     { label: "Blood Pressure", onClick: handleSortOptionClick },
     { label: "Heart Rate", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
-
-  const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const pageNumberInt = parseInt(pageNumber, 10);
-
-    // Check if pageNumber is a valid number and greater than 0
-    if (
-      !isNaN(pageNumberInt) &&
-      pageNumberInt <= totalPages &&
-      pageNumberInt > 0
-    ) {
-      setCurrentPage(pageNumberInt);
-
-      console.log("Navigate to page:", pageNumberInt);
-    } else {
-      setGotoError(true);
-      setTimeout(() => {
-        setGotoError(false);
-      }, 3000);
-      console.error("Invalid page number:", pageNumber);
-    }
-  };
-  const formatTime = (timeString: string) => {
-    // Split the time string into hours and minutes
-    const [hours, minutes] = timeString.split(":").map(Number);
-
-    // Format the hours part into 12-hour format
-    let formattedHours = hours % 12 || 12; // Convert 0 to 12
-    const ampm = hours < 12 ? "am" : "pm"; // Determine if it's AM or PM
-
-    // If minutes is undefined or null, set it to 0
-    const formattedMinutes =
-      minutes !== undefined ? minutes.toString().padStart(2, "0") : "00";
-
-    // Return the formatted time string
-    return `${formattedHours}:${formattedMinutes}${ampm}`;
-  };
-  const formatDate = (dateOfSurgery: string | number | Date) => {
-    // Create a new Date object from the provided createdAt date string
-    const date = new Date(dateOfSurgery);
-
-    // Get the month, day, and year
-    const month = date.toLocaleString("default", { month: "short" });
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    const formattedDate = `${month} ${day}, ${year}`;
-
-    return formattedDate;
-  };
-  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(e.target.value);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -208,26 +138,25 @@ export default function vitalsigns() {
         <div className="mb-2 flex w-full justify-between">
           <div className="flex-row">
             <p className="p-table-title">Vital Signs</p>
-
             <div>
-              <p className="h-[22px] w-[1157px] text-[15px] font-normal text-[#64748B]">
+              <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalVitalSigns} Vital Signs
               </p>
             </div>
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
-              <p className="text-[18px]">Add</p>
+              <Image src="/imgs/add.svg" alt="" width={18} height={18} />
+              <p className="">Add</p>
             </button>
-            <button className="btn-pdfs gap-2">
+            <button className="btn-pdf gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
-                width={22}
-                height={22}
+                width={18}
+                height={18}
               />
-              <p className="text-[18px]">Generate PDF</p>
+              <p className="">Generate PDF</p>
             </button>
           </div>
         </div>
@@ -239,7 +168,7 @@ export default function vitalsigns() {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[573px] bg-[calc(100%-20px)] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] border-[1px] border-[#E7EAEE] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -253,7 +182,7 @@ export default function vitalsigns() {
                   alt="Search"
                   width={20}
                   height={20}
-                  className="pointer-events-none absolute left-8 top-9"
+                  className="pointer-events-none absolute left-8 top-8"
                 />
               </div>
             </form>
@@ -295,22 +224,23 @@ export default function vitalsigns() {
         <div>
           <table className="text-left rtl:text-right">
             <thead>
-              <tr className="h-[70px] border-y text-[15px] font-semibold text-[#64748B]">
-                <td className="px-6 py-3">VITAL SIGN ID</td>
+              <tr className="h-[70px] border-b text-[15px] font-semibold text-[#64748B]">
+                <td className="px-6 py-3">VITAL SIGN UID</td>
                 <td className="px-6 py-3">DATE</td>
                 <td className="px-6 py-3">TIME</td>
                 <td className="px-6 py-3">BP (mmHg)</td>
                 <td className="px-6 py-3">HR (bpm)</td>
                 <td className="px-6 py-3">TEMP (°F)</td>
                 <td className="px-6 py-3">RESP (brtds/min)</td>
-                <td className="px-6 py-3 text-center">ACTION</td>
-                <td className="w-[14px]"></td>
+                <td className="relative px-6 py-3">
+                  <p className="absolute right-[80px] top-[24px]">ACTION</p>
+                </td>
               </tr>
             </thead>
 
-            <tbody className="h-[220px] overflow-y-scroll">
+            <tbody className="h-[254px]">
               {patientVitalSign.length == 0 && (
-                <div className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+                <div className="border-1 absolute flex items-center justify-center py-5">
                   <p className="text-center text-[15px] font-normal text-gray-700">
                     No Vital Sign/s <br />
                   </p>
@@ -319,16 +249,16 @@ export default function vitalsigns() {
               {patientVitalSign.map((vitalSign, index) => (
                 <tr
                   key={index}
-                  className="group border-b text-[15px] odd:bg-white hover:bg-[#f4f4f4]"
+                  className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                 >
                   <td className="px-6 py-3">
                     <ResuableTooltip text={vitalSign.vitalsign_uuid} />
                   </td>
                   <td className="px-6 py-3">
-                    {formatDate(vitalSign.vitalsign_date)}
+                    {formatTableDate(vitalSign.vitalsign_date)}
                   </td>
                   <td className="px-6 py-3">
-                    {formatTime(vitalSign.vitalsign_time)}
+                    {formatTableTime(vitalSign.vitalsign_time)}
                   </td>
                   <td className="px-6 py-3">
                     <ResuableTooltip
@@ -347,13 +277,14 @@ export default function vitalsigns() {
                     />
                   </td>
 
-                  <td className="flex justify-center px-6 py-3">
+                  <td className="relative py-3 pl-6">
                     <p
                       onClick={() => {
                         isModalOpen(true);
                         setIsEdit(true);
                         setVitalSignData(vitalSign);
                       }}
+                      className="absolute right-[40px] top-[11px]"
                     >
                       <Edit></Edit>
                     </p>

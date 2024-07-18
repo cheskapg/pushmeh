@@ -57,20 +57,6 @@ export default function prescription() {
       setIsView(false);
     }
   };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Function to handle going to next page
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
   const params = useParams<{
     id: any;
     tag: string;
@@ -111,51 +97,6 @@ export default function prescription() {
     { label: "Interval", onClick: handleSortOptionClick },
     { label: "Dosage", onClick: handleSortOptionClick },
   ]; // end of orderby & sortby function
-
-  const handleGoToPage = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const pageNumberInt = parseInt(pageNumber, 10);
-
-    // Check if pageNumber is a valid number and greater than 0
-    if (
-      !isNaN(pageNumberInt) &&
-      pageNumberInt <= totalPages &&
-      pageNumberInt > 0
-    ) {
-      setCurrentPage(pageNumberInt);
-
-      console.log("Navigate to page:", pageNumberInt);
-    } else {
-      setGotoError(true);
-      setTimeout(() => {
-        setGotoError(false);
-      }, 3000);
-      console.error("Invalid page number:", pageNumber);
-    }
-  };
-
-  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(e.target.value);
-  };
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          className={`border-px flex w-[49px] items-center justify-center border ${
-            currentPage === i ? "btn-pagination" : ""
-          }`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </button>,
-      );
-    }
-    return pageNumbers;
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -217,24 +158,24 @@ export default function prescription() {
             <p className="p-table-title">Prescription</p>
 
             <div>
-              <p className="h-[22px] w-[1157px] text-[15px] font-normal text-[#64748B]">
+            <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalPrescription} Prescriptions
               </p>
             </div>
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
-              <p className="text-[18px]">Add</p>
+              <Image src="/imgs/add.svg" alt="" width={18} height={18} />
+              <p className="">Add</p>
             </button>
-            <button className="btn-pdfs gap-2">
+            <button className="btn-pdf gap-2">
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
-                width={22}
-                height={22}
+                width={18}
+                height={18}
               />
-              <p className="text-[18px]">Generate PDF</p>
+              <p className="">Generate PDF</p>
             </button>
           </div>
         </div>
@@ -246,7 +187,7 @@ export default function prescription() {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[573px] bg-[calc(100%-20px)] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] border-[1px] border-[#E7EAEE] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -260,7 +201,7 @@ export default function prescription() {
                   alt="Search"
                   width="20"
                   height="20"
-                  className="pointer-events-none absolute left-8 top-9"
+                  className="pointer-events-none absolute left-8 top-8"
                 />
               </div>
             </form>
@@ -301,7 +242,7 @@ export default function prescription() {
           {/* START OF TABLE */}
           <div>
             {patientPrescriptions.length == 0 ? (
-              <div className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+              <div className="border-1 absolute flex items-center justify-center py-5">
                 <p className="text-center text-[15px] text-xl font-semibold text-gray-700">
                   No Prescription/s <br />
                 </p>
@@ -309,25 +250,25 @@ export default function prescription() {
             ) : (
               <table className="text-left rtl:text-right">
                 <thead>
-                  <tr className="h-[70px] border-y text-[15px] font-semibold text-[#64748B]">
-                    <td className="px-6 py-3">PRESCRIPTION ID</td>
+                <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
+                    <td className="px-6 py-3">PRESCRIPTION UID</td>
                     <td className="px-6 py-3">MEDICINE NAME</td>
                     <td className="px-6 py-3">FREQUENCY</td>
                     <td className="px-6 py-3">INTERVAL (hr/s)</td>
                     <td className="px-6 py-3">DOSAGE</td>
                     <td className="px-6 py-3">STATUS</td>
-                    <td className="px-6 py-3 text-center">ACTION</td>
-                    <td className="w-[14px]"></td>
-                  </tr>
+                    <td className="relative px-6 py-3">
+                  <p className="absolute right-[114px]  top-[24px]">ACTION</p>
+                </td>                  </tr>
                 </thead>
-                <tbody className="h-[220px] overflow-y-scroll">
-                  {patientPrescriptions.length > 0 && (
+                <tbody className="h-[254px]">
+                {patientPrescriptions.length > 0 && (
                     <>
                       {patientPrescriptions.map((prescription, index) => (
                         <tr
                           key={index}
-                          className="group border-b text-[15px] even:bg-gray-50 hover:bg-[#f4f4f4]"
-                        >
+                          className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
+                          >
                           <td className="px-6 py-3">
                             <ResuableTooltip
                               text={prescription.prescriptions_uuid}
@@ -349,33 +290,31 @@ export default function prescription() {
                           <td className="px-6 py-3">
                             {prescription.prescriptions_dosage}
                           </td>
-                          <td className="px-6 py-3">
+                          <td className="px-5 py-3">
                             <div
-                              className={`rounded-[20px] px-2 font-semibold ${
-                                prescription.prescriptions_status === "active"
-                                  ? "bg-[#dfffea] text-[15px] text-[#17C653]"
+                            className={`relative flex h-[25px] placeholder:text-[15px] w-[95px] capitalize items-center justify-center rounded-[30px] font-semibold ${
+                              prescription.prescriptions_status === "active"
+                                  ? "bg-[#dfffea]  text-[#17C653]"
                                   : prescription.prescriptions_status ===
                                       "inactive"
-                                    ? "bg-[#FEE9E9] text-[15px] text-[#EF4C6A]"
+                                    ? "bg-[#FEE9E9] text-[#EF4C6A]"
                                     : prescription.prescriptions_status
                               }`}
-                              style={{
-                                width: `${
-                                  prescription.prescriptions_status.length * 10
-                                }px`,
-                              }}
+                            
                             >
                               {prescription.prescriptions_status}
                             </div>
                           </td>
 
-                          <td className="flex justify-center gap-2 px-6 py-3">
-                            <p
+                          <td className="py-3 relative w-[220px] ">
+                          <p
                               onClick={() => {
                                 isModalOpen(true);
                                 setIsEdit(true);
                                 setPrescriptionData(prescription);
                               }}
+                              className="absolute right-[146px] top-[11px]"
+
                             >
                               <Edit></Edit>
                             </p>
@@ -386,6 +325,8 @@ export default function prescription() {
 
                                 setPrescriptionData(prescription);
                               }}
+                              className="absolute right-[40px] top-[11px]"
+
                             >
                               <View></View>
                             </p>

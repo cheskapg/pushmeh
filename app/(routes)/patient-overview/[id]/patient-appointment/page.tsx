@@ -100,21 +100,6 @@ const Appointment = () => {
     }
   };
 
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Function to handle going to next page
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(e.target.value);
-  };
   const params = useParams<{
     id: any;
     tag: string;
@@ -147,23 +132,7 @@ const Appointment = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenReminder, setIsOpenReminder] = useState(false);
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          className={`flex w-[49px] items-center justify-center ring-1 ring-gray-300 ${
-            currentPage === i ? "btn-pagination" : ""
-          }`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </button>,
-      );
-    }
-    return pageNumbers;
-  };
+
   const isModalOpen = (isOpen: boolean) => {
     setIsOpen(isOpen);
     if (isOpen) {
@@ -241,22 +210,24 @@ const Appointment = () => {
             <p className="p-table-title">Appointment</p>
 
             <div>
-              <p className="h-[22px] w-[1157px] text-[15px] font-normal text-[#64748B]">
+              <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalAppointments} Appointments
               </p>
             </div>
           </div>
           <div className="flex gap-2">
             <button onClick={() => isModalOpen(true)} className="btn-add gap-2">
-              <Image src="/imgs/add.svg" alt="" width={22} height={22} />
-              <p className="text-[18px]">Add</p>
+              <Image src="/imgs/add.svg" alt="" width={18} height={18} />
+              <p className="">Add</p>
             </button>
-            <button
-              onClick={() => isModalReminderOpen(true)}
-              className="btn-pdfs gap-2"
-            >
-              <ClipboardList width={22} height={22} />
-              <p className="text-[18px]">Reminder</p>
+            <button className="btn-pdf gap-2">
+              <Image
+                src="/imgs/downloadpdf.svg"
+                alt=""
+                width={18}
+                height={18}
+              />
+              <p className="">Generate PDF</p>
             </button>
           </div>
         </div>
@@ -268,7 +239,7 @@ const Appointment = () => {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-no-repeat px-5 py-3 pl-10 pt-[15px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] border-[1px] border-[#E7EAEE] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -282,7 +253,7 @@ const Appointment = () => {
                   alt="Search"
                   width={20}
                   height={20}
-                  className="pointer-events-none absolute left-8 top-9"
+                  className="pointer-events-none absolute left-8 top-8"
                 />
               </div>
             </form>
@@ -324,17 +295,21 @@ const Appointment = () => {
         <div>
           <table className="text-left rtl:text-right">
             <thead>
-              <tr className="h-[70px] border-y text-[15px] font-semibold uppercase text-[#64748B]">
-                <td className="px-6 py-3">STATUS</td>
-                <td className="px-6 py-3">DATE</td>
-                <td className="px-6 py-3">TIME</td>
-                <td className="px-6 py-3">END TIME</td>
-                <td className="px-6 py-3">DETAILS</td>
-                <td className="px-6 py-3 text-center">ACTION</td>
-                <td className="w-[14px]"></td>
+            <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
+            <td className="px-6 py-3">APPOINTMENT UID</td>
+                <td className="px-2 py-3">DATE</td>
+                <td className="px-2 py-3">TIME</td>
+                <td className="px-2 py-3">END TIME</td>
+                <td className="px-2 py-3">DETAILS</td>
+                <td className="relative px-6 py-3">
+                  <p className="absolute right-[60px] top-[24px]">Status</p>
+                </td>                
+                <td className="relative px-6 py-3">
+                  <p className="absolute right-[80px] top-[24px]">Action</p>
+                </td> 
               </tr>
             </thead>
-            <tbody className="h-[220px] overflow-y-scroll">
+            <tbody className="h-[254px]">
               {patientAppointments.length === 0 && (
                 <tr>
                   <td className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
@@ -349,78 +324,62 @@ const Appointment = () => {
                   {patientAppointments.map((appointments, index) => (
                     <tr
                       key={index}
-                      className="group border-b odd:bg-white even:bg-gray-50 hover:bg-[#f4f4f4]"
+                      className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                     >
-                      <td className="flex items-center rounded-full px-6 py-3 text-[15px]">
-                        <div
-                          className={`relative flex items-center rounded-[20px] px-2 font-semibold ${
-                            appointments.appointments_appointmentStatus ===
-                            "Scheduled"
-                              ? "bg-[#E7EAEE] text-[15px] text-[#71717A]" // Green color for Scheduled
-                              : appointments.appointments_appointmentStatus ===
-                                  "Done"
-                                ? "bg-[#CCFFDD] text-[15px] text-[#17C653]" // Dark color for Done
-                                : appointments.appointments_appointmentStatus ===
-                                      "Patient-IN" ||
-                                    appointments.appointments_appointmentStatus ===
-                                      "On-going"
-                                  ? "bg-[#FFF8DD] text-[15px] text-[#F6C000]" // Yellow for On Going
-                                  : appointments.appointments_appointmentStatus ===
-                                        "Missed" ||
-                                      appointments.appointments_appointmentStatus ===
-                                        "Cancelled"
-                                    ? "bg-[#FFE8EC] text-[15px] text-[#EF4C6A]" // Red color for Missed and Cancelled
-                                    : ""
-                          }`}
-                        >
-                          <span
-                            className={`mr-1 inline-block h-2 w-2 rounded-full ${
-                              appointments.appointments_appointmentStatus ===
-                              "Scheduled"
-                                ? "bg-[#7E7E7E]" // Green color for Scheduled
-                                : appointments.appointments_appointmentStatus ===
-                                    "Done"
-                                  ? "bg-[#0EB146]" // Dark color for Done
-                                  : appointments.appointments_appointmentStatus ===
-                                        "Patient-IN" ||
-                                      appointments.appointments_appointmentStatus ===
-                                        "On-going"
-                                    ? "bg-[#E4B90E]" // Yellow for On Going
-                                    : appointments.appointments_appointmentStatus ===
-                                          "Missed" ||
-                                        appointments.appointments_appointmentStatus ===
-                                          "Cancelled"
-                                      ? "bg-[#EE4D4D]" // Red color for Missed and Cancelled
-                                      : ""
-                            }`}
-                          ></span>
-                          {appointments.appointments_appointmentStatus}
-                        </div>
+                      <td className="py-3] px-6">
+                        {appointments.appointments_uuid}
                       </td>
 
-                      <td className="px-6 py-3 text-[15px]">
-                        {appointments.appointments_appointmentDate}
+                      <td className="px-2 py-3">
+                        {formatDate(appointments.appointments_appointmentDate)}
                       </td>
-                      <td className="px-6 py-3 text-[15px]">
+                      <td className="px-2 py-3">
                         {formatTime(appointments.appointments_appointmentTime)}
                       </td>
-                      <td className="px-6 py-3 text-[15px]">
+                      <td className="px-2 py-3">
                         {formatTime(
                           appointments.appointments_appointmentEndTime,
                         )}
                       </td>
-                      <td className="px-6 py-3 text-[15px]">
+                      <td className="px-2 py-3">
                         <ResuableTooltip
                           text={appointments.appointments_details}
                         />
                       </td>
-                      <td className="flex justify-center px-6 py-3">
+                      <td className="relative pl-6">
+                      <div
+                          className={` absolute right-[20px] top-[18px] flex h-[25px] w-[101px] items-center justify-center rounded-[30px] font-semibold ${
+                            appointments.appointments_appointmentStatus ===
+                            "Scheduled"
+                              ? "bg-[#E7EAEE] text-[#71717A]" // Green color for Scheduled
+                              : appointments.appointments_appointmentStatus ===
+                                  "Done"
+                                ? "bg-[#CCFFDD] text-[#17C653]" // Dark color for Done
+                                : appointments.appointments_appointmentStatus ===
+                                      "Patient-IN" ||
+                                    appointments.appointments_appointmentStatus ===
+                                      "On-going"
+                                  ? "bg-[#FFF8DD] text-[#F6C000]" // Yellow for On Going
+                                  : appointments.appointments_appointmentStatus ===
+                                      "Missed"
+                                    ? "bg-[#FFE8EC] text-[#EF4C6A]" // Red color for Missed
+                                    : appointments.appointments_appointmentStatus ===
+                                        "Cancelled"
+                                      ? "bg-[#FFE8EC] text-[#EF4C6A]" // Red color for Cancelled
+                                      : ""
+                          }`}
+                        >
+                          {appointments.appointments_appointmentStatus}
+                        </div>
+                      </td>
+                      <td className="relative py-3 pl-6">
                         <p
                           onClick={() => {
                             isModalOpen(true);
                             setIsView(true);
                             setAppointmentData(appointments);
                           }}
+                          className="absolute right-[40px] top-[11px]"
                         >
                           <View></View>
                         </p>
