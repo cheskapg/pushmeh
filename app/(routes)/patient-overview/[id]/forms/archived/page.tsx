@@ -1,11 +1,17 @@
 "use client";
 import Image from "next/image";
 import DropdownMenu from "@/components/dropdown-menu";
+import { ConfirmationModal } from "@/components/modal-content/confirmation-modal-content";
+import Modal from "@/components/reusable/modal";
+import { formatTableDate } from "@/lib/utils";
+
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { fetchFormsByPatient } from "@/app/api/forms-api/forms.api";
+import { fetchFormsByPatient,  updateFormsOfPatient,
+} from "@/app/api/forms-api/forms.api";
 import Pagination from "@/components/shared/pagination";
 import ResuableTooltip from "@/components/reusable/tooltip";
+import Restore from "@/components/shared/buttons/restore";
 
 export default function ArchiveTab() {
   const router = useRouter();
@@ -14,17 +20,25 @@ export default function ArchiveTab() {
     tag: string;
     item: string;
   }>();
+  const [formData, setFormData] = useState({
+    isArchived: false,
+  });
   const patientId = params.id.toUpperCase();
   const [isOpenOrderedBy, setIsOpenOrderedBy] = useState(false);
   const [isOpenSortedBy, setIsOpenSortedBy] = useState(false);
   const [sortOrder, setSortOrder] = useState("ASC");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [patientArchive, setpatientArchive] = useState<any[]>([]);
+  const [patientArchived, setPatientArchive] = useState<any[]>([]);
+  const [confirmRestore, setConfirmRestore] = useState(false);
+  const [formsUuid, setFormsUuid] = useState("");
+
   const [sortBy, setSortBy] = useState("dateIssued");
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalArchive, setTotalArchive] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const [term, setTerm] = useState<string>("");
   const handleOrderOptionClick = (option: string) => {
     if (option === "Ascending") {
@@ -33,7 +47,34 @@ export default function ArchiveTab() {
       setSortOrder("DESC");
     }
   };
+  const handleIsArchived = async (formUuid: string) => {
+    setIsSubmitted(true);
+    try {
+      await updateFormsOfPatient(formUuid, formData, router);
+      onSuccess();
+      setConfirmRestore(false);
+      isModalOpen(false);
 
+      return;
+    } catch (error) {
+    } finally {
+      setIsSubmitted(false);
+    }
+  };
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+
+  const onSuccess = () => {
+    setIsSuccessOpen(true);
+  };
+
+  const isConfirmModalOpen = (confirmArchived: boolean) => {
+    setConfirmRestore(confirmArchived);
+    if (confirmArchived) {
+      document.body.style.overflow = "hidden";
+    } else if (!confirmArchived) {
+      document.body.style.overflow = "visible";
+    }
+  };
   const handleSortOptionClick = (option: string) => {
     if (option == "Name") {
       setSortBy("nameofDocument");
@@ -109,7 +150,7 @@ export default function ArchiveTab() {
           true,
           router,
         );
-        setpatientArchive(response.data);
+        setPatientArchive(response.data);
         setTotalPages(response.totalPages);
         setTotalArchive(response.totalCount);
         setIsLoading(false);
@@ -119,7 +160,7 @@ export default function ArchiveTab() {
     };
 
     fetchData();
-  }, [currentPage, sortOrder, sortBy, term]);
+  }, [currentPage, sortOrder, sortBy, term, isSuccessOpen]);
 
   if (isLoading) {
     return (
@@ -133,7 +174,7 @@ export default function ArchiveTab() {
       </div>
     );
   }
-  console.log(patientArchive, "patientArchive");
+  console.log(patientArchived, "patientArchived");
   return (
     <div className="flex h-full w-full flex-col justify-between">
       <div className="h-full w-full">
@@ -155,7 +196,7 @@ export default function ArchiveTab() {
               <p className="active">Archived</p>
             </div>
             <div>
-              <p className="h-[22px] w-[1157px] text-[15px] font-normal text-[#64748B]">
+              <p className="my-1 h-[23px] text-[15px] font-normal text-[#64748B]">
                 Total of {totalArchive} logs
               </p>
             </div>
@@ -165,10 +206,10 @@ export default function ArchiveTab() {
               <Image
                 src="/imgs/downloadpdf.svg"
                 alt=""
-                width={22}
-                height={22}
+                width={18}
+                height={18}
               />
-              <p className="text-[18px]">Generate PDF</p>
+              <p className="">Generate PDF</p>
             </button>
           </div>
         </div>
@@ -180,7 +221,7 @@ export default function ArchiveTab() {
               <label className=""></label>
               <div className="flex">
                 <input
-                  className="relative m-5 h-[47px] w-[573px] rounded bg-[#fff] bg-[573px] bg-[calc(100%-20px)] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none ring-[1px] ring-[#E7EAEE]"
+                  className="relative mx-5 my-4 h-[47px] w-[460px] rounded-[3px] border-[1px] border-[#E7EAEE] bg-[#fff] bg-[center] bg-no-repeat px-5 py-3 pl-10 pt-[14px] text-[15px] outline-none placeholder:text-[#64748B]"
                   type="text"
                   placeholder="Search by reference no. or name..."
                   value={term}
@@ -194,7 +235,7 @@ export default function ArchiveTab() {
                   alt="Search"
                   width="20"
                   height="20"
-                  className="pointer-events-none absolute left-8 top-9"
+                  className="pointer-events-none absolute left-8 top-8"
                 />
               </div>
             </form>
@@ -234,56 +275,64 @@ export default function ArchiveTab() {
         </div>
 
         {/* START OF TABLE */}
-        <div>
-          {patientArchive.length == 0 ? (
-            <div>
-              <div className="w-full flex-col items-center justify-center">
-                <table className="block w-full text-left rtl:text-right">
-                  <thead className="w-full">
-                    <tr className="border-b-[1px] text-[15px] text-[#64748B]">
-                      <td className="h-[70px] px-6 py-3">NAME OF DOCUMENT</td>
-                      <td className="px-6 py-3">DATE ISSUED</td>
-                      <td className="px-6 py-3">NOTES</td>
-                      <td className="px-6 py-3">ACTION</td>
-                    </tr>
-                  </thead>
-                </table>
-                <div className="flex items-center justify-center py-5">
-                  <p className="text-center text-[15px] font-normal text-gray-700">
-                    No Form/s
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <table className="block w-full text-left rtl:text-right">
-              <thead className="w-full">
-                <tr className="h-[70px] border-b-[1px] text-[15px] font-semibold text-[#64748B]">
+          <div>
+            <table className="text-left rtl:text-right">
+              <thead>
+              
+                <tr className="h-[70px] border-b text-[15px] font-semibold uppercase text-[#64748B]">
+                  <td className="px-6 py-3">FORM UID</td>
                   <td className="px-6 py-3">NAME OF DOCUMENT</td>
                   <td className="px-6 py-3">DATE ISSUED</td>
                   <td className="px-6 py-3">NOTES</td>
-                  <td className="w-[14px]"></td>
+                  <td className="relative px-6 py-3">
+                  <p className="absolute right-[80px] top-[24px]">Action</p>
+                  </td>
                 </tr>
               </thead>
-
-              <tbody className="h-[220px] overflow-y-scroll">
-                {patientArchive.map((form, index) => (
+              <tbody className="h-[254px]">
+                {patientArchived.length === 0 && (
+                  <tr>
+                    <td className="border-1 absolute flex w-[180vh] items-center justify-center py-5">
+                      <p className="text-center text-[15px] font-normal text-gray-700">
+                        No forms <br />
+                      </p>
+                    </td>
+                  </tr>
+                )}
+                {patientArchived.map((form, index) => (
                   <tr
                     key={index}
-                    className="group border-b text-[15px] odd:bg-white hover:bg-[#f4f4f4]"
+                    className="group h-[63px] border-b text-[15px] hover:bg-[#f4f4f4]"
                   >
+                    <td className="px-6 py-3">
+                      <ResuableTooltip text={form.forms_uuid} />
+                    </td>
                     <td className="px-6 py-3">
                       <ResuableTooltip text={form.forms_nameOfDocument} />
                     </td>
-                    <td className="px-6 py-3">{form.forms_dateIssued}</td>
+                    <td className="px-6 py-3">
+                    {formatTableDate(form.forms_dateIssued)}</td>
                     <td className="px-6 py-3">
                       <ResuableTooltip text={form.forms_notes} />
                     </td>
+
+                    <td className="relative py-3 pl-6">
+                    <p
+                            onClick={() => {
+                              setFormsUuid(form.forms_uuid);
+                              setConfirmRestore(true);
+                            }}
+                            className="absolute right-[40px] top-[11px]"
+                            >
+                            <Restore/>
+                          </p>
+                        </td>
                   </tr>
+
                 ))}
               </tbody>
             </table>
-          )}
+        
         </div>
         {/* END OF TABLE */}
       </div>
@@ -295,6 +344,22 @@ export default function ArchiveTab() {
         setPageNumber={setPageNumber}
         setCurrentPage={setCurrentPage}
       />
+            {confirmRestore && (
+        <Modal
+          content={
+            <ConfirmationModal
+              uuid={formsUuid}
+              setConfirm={setConfirmRestore}
+              label="Restore"
+              handleFunction={(e) => {
+                handleIsArchived(formsUuid);
+              }}
+              isSubmitted={isSubmitted}
+            />
+          }
+          isModalOpen={isConfirmModalOpen}
+        />
+      )}
     </div>
   );
 }
