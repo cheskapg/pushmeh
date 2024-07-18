@@ -297,9 +297,11 @@ const Scheduled = () => {
                   <td className="px-6 py-3">Date</td>
                   <td className="px-6 py-3">Time</td>
                   <td className="px-6 py-3">Medication</td>
+                  <td className="px-6 py-3">Dosage</td>
                   <td className="px-6 py-3">Notes</td>
-                  <td className="px-6 py-3">Status</td>
-                  {/* <td className="px-6 py-3 "><p className="ml-[66px] w-[109px]">Action</p></td>    */}
+                  <td className="relative px-6 py-3">
+                  <p className="absolute right-[60px] top-[24px]">Status</p>
+                </td>                   {/* <td className="px-6 py-3 "><p className="ml-[66px] w-[109px]">Action</p></td>    */}
                   <td className="relative px-6 py-3">
                     <p className="absolute right-[80px] top-[24px]">Action</p>
                   </td>
@@ -343,23 +345,28 @@ const Scheduled = () => {
                             text={schedMed.medicationlogs_medicationLogsName}
                           />
                         </td>
+                      
                         <td className="px-6 py-3">
                           <ResuableTooltip
                             text={schedMed.medicationlogs_notes}
                           />
                         </td>
-                        <td className="text-15px rounded-full px-6">
-                          <div
-                            className={`relative flex h-[25px] w-[85px] items-center justify-center rounded-[30px] font-semibold ${
+                        <td className="px-6 py-3">
+                        500mg
+                        {/* static value for dosage temporary */}
+                      </td>
+                        <td className="relative pl-6">
+                        <div
+                            className={` absolute right-[36px] top-[18px]  flex h-[25px] w-[85px] items-center justify-center rounded-[30px] font-semibold ${
                               schedMed.medicationlogs_medicationLogStatus ===
                               "Given"
-                                ? "bg-[#CCFFDD] text-[15px] text-[#17C653]" // Green color for Given
+                                ? "bg-[#CCFFDD] text-[#17C653]" // Green color for Given
                                 : schedMed.medicationlogs_medicationLogStatus ===
                                     "Held"
-                                  ? "h-[25px] bg-[#FFF8DD] px-7 text-center text-[15px] text-[#F6C000]" // Dark color for Held
+                                  ? "h-[25px] bg-[#FFF8DD] px-7 text-center  text-[#F6C000]" // Dark color for Held
                                   : schedMed.medicationlogs_medicationLogStatus ===
                                       "Refused"
-                                    ? "h-[25px] w-[85px] bg-[#FFE8EC] text-[15px] text-[#DB3956]" // Red color for Refused
+                                    ? "h-[25px] w-[85px] bg-[#FFE8EC]  text-[#DB3956]" // Red color for Refused
                                     : schedMed.medicationlogs_medicationLogStatus
                             }`}
                           >
